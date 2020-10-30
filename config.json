@@ -1,0 +1,7 @@
+{
+    "config" :{       
+        "dataPath" : "/home/osboxes/Desktop/prj/sless/scrapingless-parser/data/",
+        "dataLoader" : "fileLoader"
+    }
+
+}

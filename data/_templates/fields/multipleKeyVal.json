@@ -1,0 +1,18 @@
+{
+    "get list of subFields as key/value starting on parent node" : {
+        "info" : "for each 'li' nodes found by selector generate key/value by selecting children whit keySelector and valueSelector => plus run transform foreach key/value  ",
+        "type": "multipleKeyVal",
+        "name": "book/details",
+        "css": {
+            "returnType": "text",            
+            "selectors": ["#detailBullets_feature_div > ul > li"],
+            "keySelector" : "span > span:nth-child(1)",
+            "valueSelector" : "span > span:nth-child(2)",
+            "removeKeySpaces" : true
+        },
+        "emptyVal": "",
+        "transform": [
+       
+        ]
+    }
+}

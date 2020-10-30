@@ -1,0 +1,28 @@
+{
+  "if value equal to checkCustomVal run applyType": {
+    "example": "'scrapingless' > true > return 'I love scrapingless'",
+    "rule": "ifRule",
+    "checkType": "customVal",
+    "checkCustomVal" : "scrapingless",
+    "INFO_avaibles_type:" : "equal,notEqual,startWith,endsWith,contains,notContains,emptyOrNull,notEmpty,enabledValues",    
+    "type" : "equal",
+    "caseInsensitive" : false,
+    "applyType" : "customVal",
+    "applyCustomVal" :"I love scrapingless"   
+  },
+
+  "if value is in checkCustomValues get value from FieldName": {
+    "example": "'scrapingless' is in [scrapingless,demo] = true > return FieldName.value",
+    "rule": "ifRule",
+    "checkType": "customVal",
+    "checkCustomVal" : "scrapingless",
+    "INFO_avaibles_type:" : "equal,notEqual,startWith,endsWith,contains,notContains,emptyOrNull,notEmpty,enabledValues",
+    "type" : "enabledValues",
+    "checkCustomValues" : ["scrapingless","demo"],
+    "caseInsensitive" : false,
+    "applyType" : "fieldValue",
+    "fieldName" : "FieldName"
+  }
+}
+
+

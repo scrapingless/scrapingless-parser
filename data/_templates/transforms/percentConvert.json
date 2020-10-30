@@ -1,0 +1,13 @@
+{
+  "Perform percent calculation => (value*100)/maxValue": {
+    "example": "33 > return 66%",
+    "rule": "percentConvert",
+    "maxValue": 50,
+    "appendPercentSimbol": true,
+    "type": "toArray",
+    "onerror": {
+      "customVal": "0%",
+      "type": "customVal"
+    }
+  }
+}

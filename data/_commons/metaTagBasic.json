@@ -1,0 +1,25 @@
+{
+    "data": [
+         {
+            "name": "meta",            
+            "type" : "multipleByTag",           
+            "css":{
+                "selectors": ["meta"],
+                "returnType" : "attribute",
+                "attributeTag" : "content",
+                "attributeTagKeys" : ["name","property"],
+                "exclude": ["keywords","description","base"]
+            },
+            "transform" : [                
+                {
+                    "rule" : "trim",
+                    "type" : "both",
+                    "onerror": {
+                        "type": "emptyArray"
+                    }
+                }
+            ]
+        
+        }
+    ]
+}

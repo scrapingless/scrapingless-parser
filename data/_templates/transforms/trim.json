@@ -1,0 +1,19 @@
+{
+  "trim space left and right ": {
+    "example": "' scrapingless 'return 'scrapingless'",
+    "rule": "trim",
+    "type": "both"
+  },
+
+  "trim space  right ": {
+    "example": "' scrapingless 'return ' scrapingless'",
+    "rule": "trim",
+    "type": "right"
+  },
+
+  "trim space left  ": {
+    "example": "' scrapingless 'return 'scrapingless '",
+    "rule": "trim",
+    "type": "left"
+  }
+}

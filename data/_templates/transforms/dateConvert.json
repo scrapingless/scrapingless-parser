@@ -1,0 +1,11 @@
+{
+  "convert date to a formatted date": {
+    "example": "'25 DIC 2025' > return 2025/12/25",
+    "rule": "dateConvert",
+    "toFormat": "yyyy/mm/gg",    
+    "onerror": {
+      "customVal": "",
+      "type": "customVal"
+    }
+  }
+}

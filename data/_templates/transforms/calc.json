@@ -1,0 +1,19 @@
+{
+  "multiply by a static value": {
+    "example": "2 > return 10",
+    "rule": "calc",
+    "argumentType" : "static",
+    "operator" : "*",
+    "argument" : 5
+  },
+
+  "subtract value by field value": {
+    "example": "assuming fieldName value is 5 and current value is 2 > return 3",
+    "rule": "calc",
+    "argumentType" : "fromField",
+    "operator" : "-",
+    "fieldName" : "FieldName"
+  }
+
+
+}

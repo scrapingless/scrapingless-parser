@@ -1,0 +1,18 @@
+{
+  "UpperCase text": {
+    "example": "test > return TEST",
+    "rule": "caseLowerUpper",
+    "type": "upper"
+  },
+  "LowerCase text": {
+    "example": "TEST > return test",
+    "rule": "caseLowerUpper",
+    "type": "lower"   
+  },
+  "Capitalize first letter of  text": {
+    "example": "'i love scrapingless' > return 'I love scrapingless'",
+    "rule": "caseLowerUpper",
+    "type": "capitalize"    
+  }
+
+}

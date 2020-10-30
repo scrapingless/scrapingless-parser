@@ -1,0 +1,12 @@
+{
+  "Convert value to Json Array": {
+    "example": "A|B|C > return ['A','B','C']",
+    "rule": "split",
+    "splitSeparator": "|",
+    "type": "toArray",
+    "onerror": {
+      "customVal": "",
+      "type": "customVal"
+    }
+  }
+}

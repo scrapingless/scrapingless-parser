@@ -1,0 +1,87 @@
+{
+    "data": [
+        {
+            "name": "head/pageTitle",
+            "type" : "basic",            
+            "css":{
+                "selectors": ["title"],
+                "returnType" : "text"
+            },
+            "transform" : [                
+                {
+                    "rule": "split",
+                    "splitSeparator": ",",
+                    "index": 1,
+                    "onerror": {
+                        "customVal": "99",
+                        "type": "customVal"
+                    },
+                    "type": "getSingleIndex"
+                },
+                {
+                    "rule" : "trim",
+                    "type" : "both"
+                }
+                
+            ]
+        },
+        {
+            "name": "head/description",
+            "type" : "basic",            
+            "css":{
+                "selectors": ["meta[name=\"description\"]"],
+                "returnType" : "attribute",
+                "attributeTag" : "content"
+            },
+            "transform" : [
+               
+                {
+                    "rule" : "trim",
+                    "type" : "both"
+                }
+            ]
+        },
+        {
+            "name": "head/canonical",
+            "type" : "basic",            
+            "css":{
+                "selectors": ["link[rel=\"canonical\"]"],
+                "returnType" : "attribute",
+                "attributeTag" : "href"
+            },
+            "transform" : [
+               
+                {
+                    "rule" : "trim",
+                    "type" : "both"
+                }
+            ]
+        },
+        {
+            "name": "head/keywords",
+            "type" : "basic",
+            "css":{
+                "selectors": ["meta[name=\"Keywords\"]","meta[name=\"keywords\"]"],
+                "returnType" : "attribute",
+                "attributeTag" : "content"
+            },
+            "transform" : [                
+                {
+                    "rule" : "trim",
+                    "type" : "both",
+                    "onerror": {
+                        "type": "emptyArray"
+                    }
+                },
+                {
+                    "rule": "split",
+                    "splitSeparator": ",",                   
+                    "onerror": {
+                        "type": "emptyArray"
+                    }
+                }
+            ]
+        
+        }
+    ]
+}

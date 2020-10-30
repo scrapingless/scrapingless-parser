@@ -1,0 +1,6 @@
+{
+  "Invert boolean value": {
+    "example": "true > return false",
+    "rule": "boolInvert"   
+  }
+}

@@ -1,0 +1,128 @@
+{
+ 
+  "data": [
+    {
+      "type": "bookBasicClean",
+      "name": "book/title",
+      "selectors": ["#productTitle"]      
+    },
+    {
+      "type": "bookBasic",
+      "name": "book/price",
+      "selectors": ["#newBuyBoxPrice", "#price"]      
+    },
+    {
+      "type": "bookBasic",
+      "name": "book/availability",
+      "selectors": ["#availability > span"],
+      "transform": [
+        {
+          "rule": "regexReplace",
+          "regexRules": ["\\\n+/g", "\\./g"],
+          "type": "replace",
+          "replaceVal": "",
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        }
+      ]
+    },
+
+    {
+      "type": "multiple",
+      "name": "book/authors2",
+      "css": {
+        "returnType": "text",
+        "selectors": ["#bylineInfo > span > span > a", "#bylineInfo > span > a"]
+      },
+      "emptyVal": "",
+      "transform": [
+        "authorCleaner"      
+      ]
+    },
+
+    {
+      "type": "bookBasic",
+      "name": "book/ratingsNumber",
+      "selectors": ["#acrCustomerReviewText"],      
+      "transform": [
+        {
+          "rule": "regexReplace",
+          "regexRules": ["ratings+/g"],
+          "type": "replace",
+          "replaceVal": "",
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        },
+        {
+          "rule": "trim",
+          "type": "both"
+        },
+        {
+          "rule": "split",
+          "splitSeparator": " ",
+          "type": "getSingleIndex",
+          "index": 1,
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        }
+      ]
+    },
+    {
+      "type": "bookBasicClean",
+      "name": "book/authorAbout",
+      "selectors": [
+        "#editorialReviews_feature_div > div.a-section.a-spacing-small.a-padding-base > div > div"
+      ]
+      
+    },
+    {
+      "type": "multipleKeyVal",
+      "name": "book/details",
+      "css": {
+        "returnType": "text",
+        "selectors": ["#detailBullets_feature_div > ul > li"],
+        "keySelector": "span > span:nth-child(1)",
+        "valueSelector": "span > span:nth-child(2)",
+        "removeKeySpaces": true
+      },
+      "emptyVal": "",
+      "transform": [
+        "authorCleaner"
+      ]
+    },
+    {
+      "type": "multipleKeyVal",
+      "name": "book/reviews",
+      "css": {
+        "returnType": "text",
+        "selectors": ["#cm-cr-dp-review-list > div"],
+        "keySelector": "div > div:nth-child(1) > div:nth-child(1) > a > div:nth-child(2)",
+        "valueSelector": "div > div:nth-child(1) > div:nth-child(5)",
+        "removeKeySpaces": true
+      },
+      "emptyVal": "",
+      "transform": [
+        {
+          "rule": "regexReplace",
+          "regexRules": ["\\\n+/g", "\\\\/g"],
+          "type": "replace",
+          "replaceVal": "",
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        },
+        {
+          "rule": "trim",
+          "type": "both"
+        }
+      ]
+    }
+  ]
+}

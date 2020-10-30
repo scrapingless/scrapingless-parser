@@ -1,0 +1,18 @@
+{
+    "data": [
+        {
+            "name": "body/text",           
+            "type" : "basic",            
+            "css":{
+                "selectors": ["body"],
+                "returnType" : "text"
+            },
+            "transform" : [               
+                {
+                    "rule" : "trim",
+                    "type" : "both"
+                }
+            ]
+        }
+    ]
+}

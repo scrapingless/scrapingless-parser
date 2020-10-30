@@ -1,0 +1,23 @@
+{
+    "urls": [
+        {
+            "info" : "With Amazon.com urls structure it's impossible run 'autoparse' => run always /parse/direct",
+            "url_example": "https://www.amazon.com/Harry-Potter-Sorcerers-Stone-MinaLima/dp/1338596705",
+            "regexes": [
+                "amazon.com/(.*)$"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "bookDemo",
+                    "default": true,                    
+                    "rules": [
+                        "_commons/headBase",
+                        "_commons/metaTagBasic",                       
+                        "amazon.com/bookDemo"
+                    ]
+                }
+            ]
+        }
+    ]
+}
