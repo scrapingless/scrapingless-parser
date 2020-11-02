@@ -1,5 +1,4 @@
 # scrapingless-parser
-<<<<<<< HEAD
 
 <h1>
   <br>
@@ -106,28 +105,3 @@ Instead or rewrite same rule each time it's possible create a template for e.g. 
 
 [check WIKI](https://github.com/scrapingless/scrapingless-parser/wiki)
 
-=======
-API for data extraction by reusable configuration
-
-### Scraping (less)
-The idea is to extract/parse data from HTML without rewrite same code each time using a "community" library of data extraction configurations.
-
-
-### Example
-Example: load html of example.com/products/product and parse calling scrapingless-parser API
-```var options = ;
-
-var url = "https://example.com/products/product"
-var html = fetchHtml(url);
-
-var apiUrl = "https://scrapingless-parser:3000/parse/auto?url=" + url;
-axios.post(apiUrl, {   
-    body: html
-}).then(response => 
-    //Json parsed data
-    console.log(response.data)
-  );
-```
-
-![Diagram](scrapingless-Parser.png)
->>>>>>> 4cdd0ce772ba15171ad00c11d1dd2b4bea591093
