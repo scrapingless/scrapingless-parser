@@ -21,9 +21,11 @@
 
 - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
-- [Start with Docker](#start-whit-docker)
+- [Start with Docker](#start-with-docker)
 - [How it works](#how-it-works)
+- [Multiple language support](#Multiple-language-support)
 - [Templates](#templates)
+- [Configuration example](#templates)
 
 ## Getting Started
 This API provide a set of configurable rules to extract/parse data from any website, HTML or text without write any code but by using using a free "community" library extraction rules.
@@ -51,10 +53,26 @@ axios.post(autoParseUrl, {
 
 ## Start with docker
 
-TODO
+```bash  
+# Run in Docker
+docker run  -p 8080:3000 -v /my/own/datadir:/data scrapingless/scrapingless-parser:latest
+```
+
+- Map to port 8080  
+- Mount your config directory to **data** path
+  - "Config directory" is **the location** of your domains/parsing configurations
+
+[CHECK WIKI DOCUMENTATION](https://github.com/scrapingless/scrapingless-parser/wiki)
+
+
+---  
+
+
 
 ## How it works
 > **AUTOPARSE**
+
+Automatic parser feature is able to run parsing/extraction using a default pipe of rules by domain and url without specify which configuration use.
 
 Auto-parser API works on 3 levels.  
 
@@ -94,6 +112,18 @@ Direct API call a specific set of rule **"pipe"**.
 
 ![Diagram](static/scrapingless-parser.png)
 
+
+## Multiple language support
+Scrapingless-parser is an API and therefore can be used with any language or service.
+
+- Javascript
+- Python
+- Java
+- C#
+- Php
+- Go
+- Swift
+
 ## Templates
 Often in data parsing/extraction there are same pattern.
 To facilitate less configuration writing it's possible to use templates for fields and data transformation.
@@ -107,3 +137,86 @@ Instead or rewrite same rule each time it's possible create a template for e.g. 
 
 [CHECK WIKI DOCUMENTATION](https://github.com/scrapingless/scrapingless-parser/wiki)
 
+## Configuration example
+
+#### **1. Domain**
+Create in your "data" directory a folder with equals domain name and url-filter.json 
+
+```bash
+
+../data/example.com/url.filter.json
+
+```
+
+url-filter.json contain rules to apply fore all or Some url of "example.com" with regex expression.
+
+**With AUTOPARSE**:
+
+If url match "example.com/product/(.*)$" then run sequentially all rules defined
+
+**With DIRECT**:
+You can invoke a "pipe" (or a set of rules) by name+version of this domain ( ...?ruleName=productDemo&version=0.1 )
+
+```json
+{
+    "urls": [
+        {
+            "regexes": [
+                "example.com/product/(.*)$"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "productDemo",
+                    "default": true,
+                    "rules": [
+                        "_commons/headBase",
+                        "_commons/metaTagBasic",
+                        "example.com/pruductDetails"
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+#### **2. Define fields to extract**
+Under .../data/example.com create a file pruductDetails.json.
+
+This file define the fields to extract and all transformation rules to apply to each field.
+
+In this example is defined a field "product/name" that extract data with css selector "#product-id" and apply a trasformation rule.
+
+For e.g. if value extracted is equal to
+
+"This is a product name , about tech"
+
+The transformation rule apply split by "," and get first index "This is a product name " and then apply trim ""This is a product name".
+
+
+```json
+{
+      "type": "basic",
+      "name": "product/name",
+      "selectors": ["#product-id"],
+      "transform" : [
+                {
+                    "rule": "split",
+                    "splitSeparator": ",",
+                    "index": 1,
+                    "onerror": {
+                        "customVal": "99",
+                        "type": "customVal"
+                    },
+                    "type": "getSingleIndex"
+                },
+                {
+                    "rule" : "trim",
+                    "type" : "both"
+                }
+                
+            ]
+      ]
+    }
+```

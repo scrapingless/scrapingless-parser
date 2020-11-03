@@ -6,12 +6,13 @@ var er = require("./retMessages");
 var tpl = require("./templatesJoiner");
 const { PRIORITY_BELOW_NORMAL } = require("constants");
 const { group } = require("console");
-var conf = require("../config.json");
 
 
 var $ = cheerio.load("");
 var result = [];
-var loader = require("./dataLoader/" + conf.config.dataLoader);
+
+var loaderType = process.env.LOADERTYPE || 'fileLoader';
+var loader = require("./dataLoader/" + loaderType);
 
 var autoParse = async (url, html, parseType, ruleName, version) => {
   try {

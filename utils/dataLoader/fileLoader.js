@@ -1,12 +1,11 @@
 var fs = require('fs');
-var conf = require('../../config.json');
-
+var confPath = process.env.CONFPATH || process.env.PWD + '/data/';
 
     
 
     var getParseFilter = (domain) => {
         try {
-            var parseFilter = conf.config.dataPath + domain + '/url-filters.json';
+            var parseFilter = confPath + domain + '/url-filters.json';
             var data = fs.readFileSync(parseFilter);
             return JSON.parse(data);
         } catch (error) {
@@ -22,7 +21,7 @@ var conf = require('../../config.json');
 
     var getParseRule =  (name)=> {
         try {
-            var rPath = conf.config.dataPath;
+            var rPath = confPath;
             var jsonFile = rPath +  name + '.json';            
             var data = fs.readFileSync(jsonFile);
             return JSON.parse(data);
@@ -38,7 +37,7 @@ var conf = require('../../config.json');
     
     var getTransformTemplates = (domain) => {
         try {
-            var tpl = conf.config.dataPath + domain + '/templates/transform.json';
+            var tpl = confPath + domain + '/templates/transform.json';
             var data = fs.readFileSync(tpl);
             return JSON.parse(data);
         } catch (error) {
@@ -49,7 +48,7 @@ var conf = require('../../config.json');
 
     var getFieldTemplates =  (domain) => {
         try {
-            var tpl = conf.config.dataPath + domain + '/templates/fields.json';
+            var tpl = confPath + domain + '/templates/fields.json';
             var data = fs.readFileSync(tpl);
             return JSON.parse(data);
         } catch (error) {
