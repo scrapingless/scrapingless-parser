@@ -13,9 +13,13 @@
 ![apache-2-0](https://img.shields.io/github/license/scrapingless/scrapingless-parser)
 ![issues](https://img.shields.io/github/issues/scrapingless/scrapingless-parser)
 ![Last version](https://img.shields.io/github/tag/scrapingless/scrapingless-parser.svg?style=flat-square)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/scrapingless/scrapingless-parser)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/scrapingless/scrapingless-parser)
 
 
-> **API** ready to use to __parse and transform__ metadata from any HTML and text. It works with **reusable** rules for extract fields and apply data transformation by JSON configurations.
+
+
+> **API** ready to use to __parse and transform__ metadata from any HTML (using css selectors) and text. It works with **reusable** rules for extract fields and apply data transformation by JSON configurations.
 
 ## Table of Contents
 
@@ -53,14 +57,18 @@ axios.post(autoParseUrl, {
 
 ## Start with docker
 
+
+[View on Docker hub](https://hub.docker.com/repository/docker/scrapingless/scrapingless-parser)
+
 ```bash  
 # Run in Docker
-docker run  -p 8080:3000 -v /my/own/datadir:/data scrapingless/scrapingless-parser:latest
+docker run -d -p 8080:3000 -v /my/own/datadir:/data scrapingless/scrapingless-parser:latest
 ```
 
 - Map to port 8080  
 - Mount your config directory to **data** path
   - "Config directory" is **the location** of your domains/parsing configurations
+
 
 [CHECK WIKI DOCUMENTATION](https://github.com/scrapingless/scrapingless-parser/wiki)
 
@@ -220,3 +228,7 @@ The transformation rule apply split by "," and get first index "This is a produc
       ]
     }
 ```
+
+---
+
+[CHECK WIKI DOCUMENTATION](https://github.com/scrapingless/scrapingless-parser/wiki)
