@@ -3,7 +3,7 @@
 <h1>
   <br>
   <center>
-  <img src="static/logo_black.png"  alt="scrapingless" width="200px" height="200px">
+  <img src="https://github.com/scrapingless/scrapingless-parser/blob/main/static/logo_black.png?raw=true"  alt="scrapingless" width="200px" height="200px">
   </center>
   <br>
   <br>
@@ -129,7 +129,7 @@ Direct API call a specific set of rule **"pipe"**.
 
 1. Execute each parse rule of this pipe, join all fields & for each field apply data transformation.
 
-![Diagram](static/scrapingless-parser.png)
+![Diagram](https://github.com/scrapingless/scrapingless-parser/blob/main/static/scrapingless-parser.png?raw=true)
 
 
 ## Multiple language support
