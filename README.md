@@ -34,7 +34,18 @@
 ## Getting Started
 This API provide a set of configurable rules to extract/parse data from any website, HTML or text without write any code but by using using a free "community" library extraction rules.
 
-> Example: get html from example.com/products/product and parse calling scrapingless-parser API
+
+> Example: run API tester
+The API tester load HTML from any url and perform data extraction.
+(doesn't use this as your production html loader)
+
+```markdown
+# Run url like this in your browser:
+http://localhost:8080/test/parse/direct?ruleName=bookDemo&version=0.1&url=https://www.amazon.com/anyProductPage
+
+```
+
+> Example using AXIOS: get html from example.com/products/product and parse using scrapingless-parser API
 
 
 ```js

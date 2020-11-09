@@ -12,6 +12,7 @@ router.post('/parse/auto', async function(req, res, next) {
     res.send(await parser.autoParse(req.query.url,req.text,'auto','',''));
 });
 
+
 /** Parse using specific rule by domain */
 router.post('/parse/rule', async function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');   
@@ -24,6 +25,19 @@ router.post('/parse/direct', async function(req, res, next) {
     res.send(await parser.autoParse(req.query.url,req.text,'direct',req.query.ruleName,req.query.version));
 });
 
+/** Parse with simple  html loading using specific (no url-filter regex applied) */
+router.all('/test/parse/direct', async function(req, res, next) {
+    res.setHeader('Content-Type', 'application/json');   
+    var data = await parser.testRunner(req.query.url,req.text,'direct',req.query.ruleName,req.query.version);
+    res.send(data);
+});
+
+
+/** Parse with simple  html loading using default rule by domain */
+router.all('/test/parse/auto', async function(req, res, next) {
+    res.setHeader('Content-Type', 'application/json');   
+    res.send(await parser.testRunner(req.query.url,req.text,'auto','',''));
+});
 
 
 

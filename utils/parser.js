@@ -414,7 +414,32 @@ var initGroups = function (steps, groups, size, val) {
   return groups;
 };
 
+/** Load Html and run pipe by type */
+var testRunner = async function(url, html, parseType, ruleName, version){
+  var axios = require('axios');
+  var domain = extractDomain(url);
+  var data = {};
+  await axios.get(url, {
+    headers: {
+      Referer: domain,
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }).catch(async function (error) {
+    return {"error": error};
+  }).then(async function (response) {
+      
+      if (parseType === "auto" ){
+        data = await autoParse(url,response.data,'auto','','');
+      }          
+      else  {
+        data = await  autoParse(url,response.data,'direct',ruleName,version)
+      } 
+    });
+    return data;
+}
+
 module.exports = {
   performPipe: performPipe,
   autoParse: autoParse,
+  testRunner:testRunner
 };
