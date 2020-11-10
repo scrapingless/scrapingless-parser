@@ -62,7 +62,9 @@ var autoParse = async (url, html, parseType, ruleName, version) => {
 
       //RUN PIPE
       if (pipeConf !== "") {
-        if (pipeConf.pipes !== null) return await performPipe(pipeConf, html,domain);
+        if (pipeConf.pipes !== null) {
+          return await performPipe(pipeConf, html,domain);
+        }
         else return er.err("Cannot find any pipe for url: " + url);
       } else return er.err("Cannot find any pipe for url: " + url);
     } else return er.err("Cannot find any url-filter for domain: " + domain);
@@ -132,6 +134,15 @@ var getFirstNode = function (selectors) {
   return [];
 };
 
+//Get first node from selectors list
+var getFirstNodeCustom = function (selectors,node) {
+  for (s in selectors) {
+    var node = $(node).find(selectors[s]);
+    if (node.length > 0) return node;
+  }
+  return [];
+};
+
 //Return value for html Element
 var getNodeValue = function (
   type,
@@ -160,11 +171,14 @@ var getNodeValue = function (
 
 //Return custom value or blank if value is invalid or empty
 var emptyValueCheck = function (value, customVal) {
-  if (value == (undefined || null || "" || isNaN(value))) {
-    // value == undefined || value == null || isNaN(value) || value == "" ) {
-    if (customVal === undefined) customVal = "";
+  if (value === (undefined || null || "" || isNaN(value) || '')) {
+  //if ( value === undefined || value === null || isNaN(value) || value === "" ) {
+    if (customVal === undefined) 
+       customVal = "";
     return customVal;
-  } else return value;
+  } 
+  else 
+  return value;
 };
 
 //Generate key/val json ok
@@ -203,7 +217,8 @@ var parseBasic = function (item) {
     node,
     0,
     item.staticVal,
-    item.emptyValueCustomVal
+    item.emptyVal
+    
   );
   value = transform.transform(value, item.transform, result);
   return keyValJson(item.name, value);
@@ -221,7 +236,7 @@ var parseMultiple = function (item) {
       $(node),
       0,
       item.staticVal,
-      item.emptyValueCustomVal
+      item.emptyVal
     );
     if(value !== "")
       values.push(transform.transform(value, item.transform, result));
@@ -244,7 +259,7 @@ var parseMultipleByTag = function (item) {
       $(node),
       0,
       item.staticVal,
-      item.emptyValueCustomVal
+      item.emptyVal
     );
 
     if (value === undefined) value = "";
@@ -256,7 +271,7 @@ var parseMultipleByTag = function (item) {
         $(node),
         0,
         item.staticVal,
-        item.emptyValueCustomVal
+        item.emptyVal
       );
       if (key !== undefined) {
         if (!item.css.exclude.includes(key)) {
@@ -284,7 +299,7 @@ var parseMultipleKeyVal = function (item) {
       $(keyNode),
       0,
       item.staticVal,
-      item.emptyValueCustomVal
+      item.emptyVal
     );
 
     var valueNode = $(node).find(item.css.valueSelector);
@@ -294,7 +309,7 @@ var parseMultipleKeyVal = function (item) {
       $(valueNode),
       0,
       item.staticVal,
-      item.emptyValueCustomVal
+      item.emptyVal
     );
 
     if (value === undefined) value = "";
@@ -319,14 +334,18 @@ var parseSubFields = function (item) {
     var subFields = [];
     if (item.fields !== undefined) {
       item.fields.forEach(function (field) {
-        //var node = getFirstNode(field.css.selectors);
+        
+        var n = node;
+        if(field.css.selectors !== undefined && field.css.selectors.length > 0)
+          n = getFirstNodeCustom(field.css.selectors,node);
+        
         var value = getNodeValue(
           field.css.returnType,
           field.css.attributeTag,
-          node,
+          n,
           nodes.length,
           field.staticVal,
-          field.emptyValueCustomVal
+          field.emptyVal
         );
         value = transform.transform(value, field.transform, result);
         subFields.push(keyValJson(field.name, value));
@@ -357,6 +376,9 @@ var parse = (rule, $) => {
       } else if (item.type == "subFields") {
         val = parseSubFields(item);
       }
+
+      if(val[item.name] === undefined)
+        val[item.name] = "";
 
       //grouping
       if (item.name.includes("/")) {

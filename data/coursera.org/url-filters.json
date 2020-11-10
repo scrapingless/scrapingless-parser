@@ -1,0 +1,36 @@
+{
+    "urls": [
+        {
+            "info" : "Category listing /browse/category,/browse/category?page=1-99999",
+            "regexes": [
+                "https://www.coursera.org/browse/.*"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "courses",
+                    "default": true,                    
+                    "rules": [                 
+                        "coursera.org/courses"
+                    ]
+                }
+            ]
+        },
+        {
+            "info" : "Single course page https://www.coursera.org/learn/course-title***",
+            "regexes": [
+                "https://www.coursera.org/learn/.*"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "courses",
+                    "default": true,                    
+                    "rules": [                 
+                        "coursera.org/courseDetail"
+                    ]
+                }
+            ]
+        }
+    ]
+}

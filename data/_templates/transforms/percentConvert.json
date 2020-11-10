@@ -3,7 +3,7 @@
     "example": "33 > return 66%",
     "rule": "percentConvert",
     "maxValue": 50,
-    "appendPercentSimbol": true,
+    "appendPercentSymbol": true,
     "type": "toArray",
     "onerror": {
       "customVal": "0%",

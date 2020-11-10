@@ -1,0 +1,13 @@
+{
+    "bookBasicClean": {
+        "type": "basic",       
+        "css": {
+          "returnType": "text"
+        },
+        "emptyVal": "",
+        "transform": [
+          "removeReturn"        
+        ]
+    }
+   
+  }

@@ -1,0 +1,10 @@
+{
+ 
+  "data": [
+    {
+      "type": "bookBasicClean",
+      "name": "book/title",
+      "selectors": ["#productTitle"]      
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+    "removeReturn": {
+      "rule": "regexReplace",
+      "regexRules": ["\\\n+/gi"],
+      "type": "replace",
+      "replaceVal": "",
+      "onerror": {
+        "customVal": "",
+        "type": "customVal"
+      }
+    }
+  }

@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "type": "textField",
+      "name": "title",
+      "css": {
+        "returnType": "text",
+        "selectors": [
+          "div.BannerTitle.text-xs-left.banner-title-container--without-subtitle > h1"
+        ]
+      }
+    },
+    {
+      "type": "ratings",
+      "name": "title",
+      "css": {
+        "returnType": "text",
+        "selectors": [".ratings-count-expertise-style > span"]
+      },
+      "transform": [
+        {
+          "rule": "regexReplace",
+          "regexRules": ["ratings"],
+          "type": "replace",
+          "replaceVal": "",
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        },
+        {
+          "rule": "trim",
+          "type": "both"
+        }
+      ]
+    }
+  ]
+}

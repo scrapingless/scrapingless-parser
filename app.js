@@ -6,7 +6,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var parseRouter = require('./routes/parser');
 var conf = require('./config.json');
-
+var bodyParser = require('body-parser');
 
 var app = express();
 
@@ -14,9 +14,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+app.use(bodyParser.text({ type: 'text/plain', limit : "25mb" }))
 //TEXT/PLAIN
-app.use(function(req, res, next){
+/*app.use(function(req, res, next){
     if (req.is('text/*')) {
       req.text = '';
       req.setEncoding('utf8');
@@ -25,7 +25,7 @@ app.use(function(req, res, next){
     } else {
       next();
     }
-  });
+  });*/
 
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
