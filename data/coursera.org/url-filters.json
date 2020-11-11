@@ -24,7 +24,7 @@
             "pipes": [
                 {
                     "version" : 0.1,
-                    "name": "courses",
+                    "name": "course",
                     "default": true,                    
                     "rules": [                 
                         "coursera.org/courseDetail"

@@ -1,0 +1,60 @@
+{
+ 
+  "data": [   
+    {
+      "type": "subFields",
+      "name": "articles",
+      "css": {
+        "returnType": "text",
+        "selectors": ["div.es.et.s > section"]
+      },
+      "emptyVal": "",
+      "transform": [],
+      "fields": [
+        {
+          "name": "title",
+          "css": {
+            "returnType": "text",
+            "selectors": ["div h3"]
+          },
+          "emptyVal": "none"
+        },
+        {
+          "name": "summary",
+          "css": {
+            "returnType": "text",
+            "selectors": ["div > section > div > div > div > div"]
+          },
+          "emptyVal": "",
+          "transform": []
+        },
+        {
+          "name": "author",
+          "css": {
+            "returnType": "text",
+            "selectors": ["div > section > div  > div:nth-child(2) > div > div > div "]
+          },
+          "emptyVal": "",
+          "transform": []
+        },
+        {
+          "name": "link",
+          "css": {
+            "returnType": "attribute",
+            "selectors": ["div h3 > a"],
+            "attributeTag" : "href"
+          },
+          "emptyVal": "",
+          "transform": [{
+            "rule":"appendPrepend",
+              "type" : "prepend",
+              "valueType": "static",
+              "value" : "https://medium.com"
+          }]
+        }
+      ]
+    }
+
+    
+  ]
+}

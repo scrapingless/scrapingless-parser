@@ -1,0 +1,34 @@
+{
+    "urls": [
+        {
+            "regexes": [
+                "medium.com/topic/(.*)$"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "topicListing",
+                    "default": true,                    
+                    "rules": [                                           
+                        "medium.com/topicListing"
+                    ]
+                }
+            ]
+        },
+        {
+            "regexes": [
+                ".*\\.medium.com/(.*)$"
+            ],
+            "pipes": [
+                {
+                    "version" : 0.1,
+                    "name": "articleDetail",
+                    "default": true,                    
+                    "rules": [                                           
+                        "medium.com/articleDetail"
+                    ]
+                }
+            ]
+        }
+    ]
+}

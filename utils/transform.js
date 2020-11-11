@@ -324,7 +324,7 @@ class DataTr {
       if (el.type == "match") {
         var v = "";
         var tmp = this.value.match(re);
-        s.value.match(re).forEach((m) => {
+        this.value.match(re).forEach((m) => {
           v = v + m + el.matchJoinerSeparator;
         });
         this.value = v.trimRight(el.matchJoinerSeparator);

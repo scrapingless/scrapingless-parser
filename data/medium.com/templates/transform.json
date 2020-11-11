@@ -8,15 +8,5 @@
         "customVal": "",
         "type": "customVal"
       }
-    },
-    "commonReplace": {
-      "rule": "regexReplace",
-      "regexRules": ["ratings",","],
-      "type": "replace",
-      "replaceVal": "",
-      "onerror": {
-        "customVal": "",
-        "type": "customVal"
-      }
     }
   }

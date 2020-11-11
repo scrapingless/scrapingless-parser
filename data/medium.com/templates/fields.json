@@ -1,0 +1,15 @@
+{
+  "textField": {
+    "type": "basic",
+    "css": {
+      "returnType": "text"
+    },
+    "emptyVal": "",
+    "transform": [
+      {
+        "rule": "trim",
+        "type": "both"
+      }
+    ]
+  }
+}

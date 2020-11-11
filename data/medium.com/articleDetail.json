@@ -1,0 +1,48 @@
+{
+  "data": [
+    {
+      "type": "textField",
+      "name": "articleTitle",
+      "selectors": ["body  h1:nth-child(1)"]
+    },
+    {
+      "type": "textField",
+      "name": "author/name",
+      "selectors": ["div.dm.w.n > div > div > span > a > h4"]
+    },
+    {
+      "type": "basic",
+      "name": "author/link",
+      "css": {
+        "returnType": "attribute",
+        "selectors": ["div.dm.w.n > div > div > span > a"],
+        "attributeTag": "href"
+      },
+      "emptyVal": "-1",
+      "transform": [
+        {
+          "rule": "appendPrepend",
+          "type": "prepend",
+          "valueType": "static",
+          "value": "https://medium.com"
+        }
+      ]
+    },
+    {
+      "type": "multiple",
+      "name": "paragraphs",
+      "css": {
+        "returnType": "text",
+        "attributeTag": "class",
+        "selectors": ["article > div > section > div > div p"]
+      },
+      "emptyVal": "",
+      "transform": []
+    },
+    {
+      "type": "textField",
+      "name": "claps",
+      "selectors": ["div.s.kj.kk.kl.km.ll.lm.ln.lo.lp.lq > div > h4 > button"]
+    }
+  ]
+}

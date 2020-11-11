@@ -3,36 +3,128 @@
     {
       "type": "textField",
       "name": "title",
-      "css": {
-        "returnType": "text",
+    
         "selectors": [
           "div.BannerTitle.text-xs-left.banner-title-container--without-subtitle > h1"
         ]
-      }
+      
     },
     {
-      "type": "ratings",
-      "name": "title",
+      "type": "basic",
+      "name": "ratings/count",
       "css": {
         "returnType": "text",
         "selectors": [".ratings-count-expertise-style > span"]
       },
       "transform": [
+        "commonReplace",
+        {
+          "rule": "trim",
+          "type": "both"
+        }
+      ]
+    },
+    {
+      "type": "basic",
+      "name": "ratings/stars",
+      "css": {
+        "returnType": "attribute",
+        "selectors": ["#StarRating_5_Expertise"],
+        "attributeTag" : "value"
+      },
+      "transform": [
+       
+      ]
+    },
+    {
+      "type": "textField",
+      "name": "instructor",    
+       "selectors": [".rc-BannerInstructorInfo> ul > li > a > div > div > span"]      
+    },
+    
+    {
+      "type": "basic",
+      "name": "studentsEnrolled",
+      "css": {
+        "returnType": "html",
+        "selectors": ["body > script"]
+      },
+      "transform": [
+        {
+          "rule": "subString",
+          "findString": "totalEnrollmentCount\":",
+          "getType": "after",
+          "onerror": {
+            "customVal": "-2",
+            "type": "customVal"
+          }
+        },
+        {
+          "rule": "subString",
+          "findString": "}",
+          "getType": "before",
+          "onerror": {
+            "customVal": "-2",
+            "type": "customVal"
+          }
+        },
         {
           "rule": "regexReplace",
-          "regexRules": ["ratings"],
+          "regexRules": ["totalEnrollmentCount",":","\""],
           "type": "replace",
           "replaceVal": "",
           "onerror": {
             "customVal": "",
             "type": "customVal"
           }
-        },
-        {
-          "rule": "trim",
-          "type": "both"
         }
       ]
-    }
+    },
+    {
+      "type": "textField",
+      "name": "summary",
+    
+        "selectors": [
+          "#main > div > div.rc-XdpSection.cdp-about > div > div > div > div > div._1b7vhsnq.m-t-2 > div.m-t-1.description > div > div.content",
+          "div.m-t-1.description > div > div.content > div.content-inner > p:nth-child(1)1"
+        ]
+      
+    },
+    {
+      "type": "multiple",
+      "name": "skills",
+      "css": {
+          "returnType": "text",            
+          "selectors": ["div.Skills.m-y-2.p-x-2.p-t-1.p-b-2.border-a > div > span > span > span"]
+      },
+      "emptyVal": [],
+      "transform": [
+  
+      ]
+  },
+  {
+    "type": "textField",
+    "name": "hours",
+  
+      "selectors": [
+        "#main > div > div.rc-XdpSection.cdp-about > div > div > div > div > div.m-t-2 > div:nth-child(4) > div.ProductGlance > div:nth-child(4) > div._1tu07i3a > div > span"
+      ],
+      "transform": [
+        {
+          "rule": "regexReplace",
+          "regexRules": ["\\d+\/gi"],
+          "type": "match",
+          "matchJoinerSeparator": "",
+          "onerror": {
+            "customVal": "",
+            "type": "customVal"
+          }
+        }
+      ]
+  }
+
+  
+    
+    
   ]
 }
