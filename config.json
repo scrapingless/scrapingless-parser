@@ -1,7 +1,31 @@
 {
     "config" :{       
-        "dataPath" : "/home/osboxes/Desktop/prj/sless/scrapingless-parser/data/",
-        "dataLoader" : "fileLoader"
+        "dataLoader" : "fileLoaderYaml",
+        "scraper": {
+            "browser" : "puppeteer",
+            "apiUrl": "",
+            "apiMethod" : "GET",
+            "apiParamsUrlKey": "url",
+            "apiParams": {
+                "id": 12345,
+                "url" : ""
+            },
+            "puppeteerLaunchConf": {
+                "headless": true,
+                "args": ["--disable-setuid-sandbox","--disable-extensions"],
+                "ignoreHTTPSErrors": true,
+                "defaultViewport": {
+                    "width": 1024,
+                    "height":768,
+                    "deviceScaleFactor": 1,
+                    "isMobile": false,
+                    "hasTouch":false,
+                    "isLandscape" :false
+                },
+                "timeout": 30000
+            },
+            "puppeteerEndPoint": ""
+        }
     }
 
 }

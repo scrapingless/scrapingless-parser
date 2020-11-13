@@ -1,0 +1,26 @@
+---
+- topicListing:
+  regexes:
+  - (http.*)(medium.com/topic/)(.*)$
+  wait:
+    waitSelectors:           
+              - "body"
+    waitTimeout: 30000
+    waitVisibility: true
+    waitType: all
+  pipes:
+  - version: 0.1
+    name: topicListing
+    default: true
+    rules:
+    - medium.com/topicListing
+
+- articleDetail:
+  regexes:
+  - ".*\\.medium.com/(.*)$"
+  pipes:
+  - version: 0.1
+    name: articleDetail
+    default: true
+    rules:
+    - medium.com/articleDetail

@@ -1,7 +1,6 @@
 var fs = require("fs");
 const cheerio = require("cheerio");
 var transform = require("./transform");
-const extractDomain = require("extract-domain");
 var er = require("./retMessages");
 var tpl = require("./templatesJoiner");
 const { PRIORITY_BELOW_NORMAL } = require("constants");
@@ -11,67 +10,26 @@ const { group } = require("console");
 var $ = cheerio.load("");
 var result = [];
 
-var loaderType = process.env.LOADERTYPE || 'fileLoader';
+var loaderType = process.env.LOADERTYPE || 'fileLoaderYaml';
 var loader = require("./dataLoader/" + loaderType);
 
-var autoParse = async (url, html, parseType, ruleName, version) => {
+
+
+var autoParse = async (url, html, pipeConf) => {
   try {
-    var domain = extractDomain(url);
-    var urlFilter = loader.getParseFilter(domain);
-
-    if (urlFilter != undefined && urlFilter != null) {
-      //find pipe to apply
-      var pipeConf = "";
-      for (let i = 0; i < urlFilter.urls.length; i++) {
-        const el = urlFilter.urls[i];
-
-        var urlMatch = false;
-        for (let x = 0; x < el.regexes.length; x++) {
-          const r = el.regexes[x];
-          var re = new RegExp(r, "gim");
-
-          if(url.match(re))
-            urlMatch = true;
-        }
-
-        if(parseType === "direct")
-            urlMatch = true;
-
-        if(urlMatch === true){
-            for (let y = 0; y < el.pipes.length; y++) {
-                var aPipe = el.pipes[y];
-    
-                if (parseType === "auto" && aPipe.default === true) {
-                  pipeConf = aPipe;
-                  break;
-                } else if (aPipe.name == ruleName && aPipe.version == version) {
-                  pipeConf = aPipe;
-                  break;
-                }
-                 else if (parseType === "direct" && aPipe.name == ruleName && aPipe.version == version) {
-                    pipeConf = aPipe;
-                break;
-                }
-              }
-        }
-
-         
-
-        if (pipeConf != "") break;
-      }
-
+   
       //RUN PIPE
-      if (pipeConf !== "") {
+      if (pipeConf !== undefined || pipeConf !== "") {
         if (pipeConf.pipes !== null) {
-          return await performPipe(pipeConf, html,domain);
+          return await performPipe(pipeConf, html,pipeConf.domain);
         }
         else return er.err("Cannot find any pipe for url: " + url);
       } else return er.err("Cannot find any pipe for url: " + url);
-    } else return er.err("Cannot find any url-filter for domain: " + domain);
   } catch (error) {
     return er.err("General error: " + error);
   }
 };
+
 
 //PIPELINE
 var performPipe = async (pipeConf, html,domain) => {
@@ -436,32 +394,8 @@ var initGroups = function (steps, groups, size, val) {
   return groups;
 };
 
-/** Load Html and run pipe by type */
-var testRunner = async function(url, html, parseType, ruleName, version){
-  var axios = require('axios');
-  var domain = extractDomain(url);
-  var data = {};
-  await axios.get(url, {
-    headers: {
-      Referer: domain,
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }).catch(async function (error) {
-    return {"error": error};
-  }).then(async function (response) {
-      
-      if (parseType === "auto" ){
-        data = await autoParse(url,response.data,'auto','','');
-      }          
-      else  {
-        data = await  autoParse(url,response.data,'direct',ruleName,version)
-      } 
-    });
-    return data;
-}
 
 module.exports = {
   performPipe: performPipe,
-  autoParse: autoParse,
-  testRunner:testRunner
+  autoParse: autoParse
 };

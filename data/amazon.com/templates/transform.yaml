@@ -1,0 +1,29 @@
+---
+removeReturn:
+  rule: regexReplace
+  regexRules:
+  - |-
+    \
+    +/gi
+  type: replace
+  replaceVal: ''
+  onerror:
+    customVal: ''
+    type: customVal
+authorCleaner:
+  rule: regexReplace
+  regexRules:
+  - |-
+    \
+    by+/g
+  - |-
+    \
+    +/g
+  - "\\(Author\\)+/gi"
+  - "\\(Illustrator\\)+/gi"
+  - "&0more/gi"
+  type: replace
+  replaceVal: ''
+  onerror:
+    customVal: ''
+    type: customVal
