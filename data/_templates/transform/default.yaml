@@ -59,6 +59,7 @@ $prepend:
   valueType: static
   
 
+
 ## remove \n from string
 $removeReturn:
   rule: regexReplace
@@ -71,17 +72,4 @@ $removeReturn:
   onerror:
     customVal: ''
     type: customVal
-authorCleaner:
-  rule: regexReplace
-  regexRules:
-  - |-
-    \
-    by+/g
-  - |-
-    \
-    +/g
-  type: replace
-  replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal
+    

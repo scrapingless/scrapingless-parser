@@ -13,7 +13,6 @@ var getPipeConf = async (url,parseType,ruleName,version) => {
     if (urlFilter !== undefined && urlFilter !== null) {
       //find pipe to apply
       var pipeConf = "";
-      var x = urlFilter['filters'];
       for (let i = 0; i < urlFilter.filters.length; i++) {
         const el =  urlFilter.filters[i];
 

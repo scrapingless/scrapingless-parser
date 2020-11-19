@@ -1,0 +1,112 @@
+---
+data:
+
+
+
+- type: subFields
+  name: offers
+  returnType: text
+  selectors:
+    - .hotellist > div > div
+  fields:
+
+
+  - returnType: text
+    name: hotel
+    selectors:
+        - a.js-sr-hotel-link    
+    transform:
+      - $removeReturn
+      
+
+  - name: hotel-link
+    returnType: attribute
+    attributeTag: href
+    selectors:
+      - a.js-sr-hotel-link
+    transform:
+      - $removeReturn
+      - $prepend:
+           value: http://www.booking.com
+      - $subStringBefore:
+          findString: "?"
+
+
+
+  - returnType: text
+    name: desc
+    selectors:
+        - div.hotel_desc
+    transform:
+      - $removeReturn
+
+  - returnType: text
+    name: lastBooking
+    selectors:
+        - div div.lastbooking
+    transform:
+      - $removeReturn
+
+  - returnType: text
+    name: lastBookingTimes
+    selectors:
+        - div div.lastbooking
+    transform:
+      - $subStringBefore:
+          findString: "times"
+      - rule: regexReplace
+        regexRules:
+          - "booked"
+          - "Booked"
+        type: replace
+        replaceVal: ''
+      - $trim
+
+  - returnType: text
+    name: lastBookingHours
+    selectors:
+        - div div.lastbooking
+    transform:
+      - $subStringAfter:
+          findString: "last"
+      - rule: regexReplace
+        regexRules:
+          - "hours on our site"
+          - "last"          
+        type: replace
+        replaceVal: ''
+      - $trim
+
+
+  - returnType: text
+    name: reviewScore
+    selectors:
+        - div.bui-review-score__title
+    transform:
+      - $removeReturn
+      - $trim
+
+  - returnType: text
+    name: score
+    selectors:
+        - div.bui-review-score__badge
+    transform:
+      - $removeReturn
+      - $trim
+
+  - returnType: text
+    name: hotelReviews
+    selectors:
+        - div.bui-review-score__text    
+    transform:
+      - $removeReturn
+      - rule: regexReplace
+        regexRules:
+          - "reviews"
+          - ","
+        type: replace
+        replaceVal: ''        
+      - $trim   
+      
+
+        

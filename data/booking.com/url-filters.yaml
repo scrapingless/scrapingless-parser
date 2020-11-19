@@ -1,0 +1,14 @@
+---
+filters:
+- filter: (http.*)(booking.com/searchresults.*).*
+  pipe: bookingListing 
+
+
+
+### Scraping pipes & Browser Wait rules
+pipes:
+
+  ### Courses list
+  bookingListing:
+    scrapers:
+      - booking.com/bookingListing
