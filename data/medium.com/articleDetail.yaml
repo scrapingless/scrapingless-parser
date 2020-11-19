@@ -1,36 +1,30 @@
 ---
 data:
-- type: textField
-  name: articleTitle
+- name : articleTitle
+  type: $text
   selectors:
-  - body  h1:nth-child(1)
-- type: textField
-  name: author/name
+   - body  h1:nth-child(1)
+
+- name : author/name
+  type: $text
   selectors:
   - div.dm.w.n > div > div > span > a > h4
-- type: basic
-  name: author/link
-  css:
-    returnType: attribute
-    selectors:
+
+- name : author/link
+  type: $attr
+  attributeTag: href
+  selectors:
     - div.dm.w.n > div > div > span > a
-    attributeTag: href
-  emptyVal: "-1"
   transform:
-  - rule: appendPrepend
-    type: prepend
-    valueType: static
+  - prepend:
     value: https://medium.com
-- type: multiple
-  name: paragraphs
-  css:
-    returnType: text
-    attributeTag: class
-    selectors:
+
+- name : paragraphs
+  type: $text
+  selectors:
     - article > div > section > div > div p
-  emptyVal: ''
-  transform: []
-- type: textField
-  name: claps
+
+- name : claps
+  type: $text
   selectors:
   - div.s.kj.kk.kl.km.ll.lm.ln.lo.lp.lq > div > h4 > button

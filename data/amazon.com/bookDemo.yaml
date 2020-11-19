@@ -1,15 +1,40 @@
 ---
 data:
+
+
+
 - type: bookBasicClean
   name: book/title
   selectors:
   - "#productTitle"
-- type: bookBasic
+  transform:
+  - rule: regexReplace
+    regexRules:
+    - "\\n"
+    type: replace
+    replaceVal: ''
+
+- type: $text
+  name: book/ratingsNumber
+  selectors:
+  - "#acrCustomerReviewText"
+  transform:
+    - rule: split
+      splitSeparator: " "
+      type: getSingleIndex
+      index: 1
+      onerror:
+        customVal: ''
+        type: customVal
+
+
+- type: $text
   name: book/price
   selectors:
-  - "#newBuyBoxPrice"
   - "#price"
-- type: bookBasic
+  - "#newBuyBoxPrice"
+
+- type: $text
   name: book/availability
   selectors:
   - "#availability > span"
@@ -25,64 +50,46 @@ data:
     onerror:
       customVal: ''
       type: customVal
+
 - type: multiple
   name: book/authors2
-  css:
-    returnType: text
-    selectors:
+  returnType: text
+  selectors:
     - "#bylineInfo > span > span > a"
     - "#bylineInfo > span > a"
   emptyVal: ''
   transform:
   - authorCleaner
-- type: bookBasic
-  name: book/ratingsNumber
-  selectors:
-  - "#acrCustomerReviewText"
-  transform:
-  - rule: regexReplace
-    regexRules:
-    - ratings+/g
-    type: replace
-    replaceVal: ''
-    onerror:
-      customVal: ''
-      type: customVal
-  - rule: trim
-    type: both
-  - rule: split
-    splitSeparator: " "
-    type: getSingleIndex
-    index: 1
-    onerror:
-      customVal: ''
-      type: customVal
-- type: bookBasicClean
+
+
+
+- type: $text
   name: book/authorAbout
   selectors:
+  - "#authorBio"
   - "#editorialReviews_feature_div > div.a-section.a-spacing-small.a-padding-base
     > div > div"
+
 - type: multipleKeyVal
   name: book/details
-  css:
-    returnType: text
-    selectors:
+  returnType: text
+  selectors:
     - "#detailBullets_feature_div > ul > li"
-    keySelector: span > span:nth-child(1)
-    valueSelector: span > span:nth-child(2)
-    removeKeySpaces: true
+  keySelector: span > span:nth-child(1)
+  valueSelector: span > span:nth-child(2)
+  removeKeySpaces: true
   emptyVal: ''
   transform:
   - authorCleaner
+  
 - type: multipleKeyVal
   name: book/reviews
-  css:
-    returnType: text
-    selectors:
+  returnType: text
+  selectors:
     - "#cm-cr-dp-review-list > div"
-    keySelector: div > div:nth-child(1) > div:nth-child(1) > a > div:nth-child(2)
-    valueSelector: div > div:nth-child(1) > div:nth-child(5)
-    removeKeySpaces: true
+  keySelector: div > div:nth-child(1) > div:nth-child(1) > a > div:nth-child(2)
+  valueSelector: div > div:nth-child(1) > div:nth-child(5)
+  removeKeySpaces: true
   emptyVal: ''
   transform:
   - rule: regexReplace

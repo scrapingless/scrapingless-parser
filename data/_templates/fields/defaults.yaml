@@ -1,0 +1,23 @@
+---
+$text:
+  type: basic
+  returnType: text
+  emptyVal: ''
+  transform:
+  - $trim
+
+$count:
+  type: basic
+  returnType: count
+
+$attr:
+  type: basic
+  returnType: attribute
+  emptyVal: ''
+  transform:
+  - $trim
+
+$html:
+  type: basic
+  returnType: html
+  emptyVal: ''

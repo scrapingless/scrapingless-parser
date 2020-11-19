@@ -1,4 +1,5 @@
 var dateFormat = require("dateformat");
+var defTypes = require("./defaultTypes");
 var value = value;
 var rule = rule;
 
@@ -14,42 +15,44 @@ class DataTr {
     if (this.rule !== undefined) {
       this.rule.forEach((el) => {
         try {
+
+
           switch (el.rule) {
             case "split":
-              this.splitOrToArray(el);
+              this.splitOrToArray(defTypes.applyOnError(el));
               break;
             case "appendPrepend":
-              this.appendPrepend(el);
+              this.appendPrepend(defTypes.applyOnError(el));
               break;
             case "boolInvert":
-              this.boolInvert(el);
+              this.boolInvert(defTypes.applyOnError(el));
               break;
             case "calc":
-              this.calc(el);
+              this.calc(defTypes.applyOnError(el));
               break;
             case "caseLowerUpper":
-              this.caseLowerUpper(el);
+              this.caseLowerUpper(defTypes.applyOnError(el));
               break;
             case "checker":
-              this.checker(el);
+              this.checker(defTypes.applyOnError(el));
               break;
             case "dateConvert":
-              this.dateConvert(el);
+              this.dateConvert(defTypes.applyOnError(el));
               break;
             case "ifRule":
-              this.ifRule(el);
+              this.ifRule(defTypes.applyOnError(el));
               break;
             case "percentConvert":
-              this.percentConvert(el);
+              this.percentConvert(defTypes.applyOnError(el));
               break;
             case "regexReplace":
-              this.regexReplace(el);
+              this.regexReplace(defTypes.applyOnError(el));
               break;
             case "trim":
-              this.trimmer(el);
+              this.trimmer(defTypes.applyOnError(el));
               break;
             case "subString":
-              this.subString(el);
+              this.subString(defTypes.applyOnError(el));
               break;
 
             /*
@@ -62,6 +65,9 @@ class DataTr {
             default:
               break;
           }
+
+        
+
         } catch (error) {
           this.onerror(el);
         }
@@ -257,8 +263,13 @@ class DataTr {
         if (vv != val) this.ifApply(el);
       } else if (el.type == "startWith") {
         if (vv.startsWith(val)) this.ifApply(el);
+      } 
+      else if (el.type == "notStartWith") {
+        if (!vv.startsWith(val)) this.ifApply(el);
       } else if (el.type == "endsWith") {
         if (vv.endsWith(val)) this.ifApply(el);
+      } else if (el.type == "notEndsWith") {
+        if (!vv.endsWith(val)) this.ifApply(el);
       } else if (el.type == "contains") {
         if (vv.includes(val)) this.ifApply(el);
       } else if (el.type == "notContains") {
@@ -293,7 +304,12 @@ class DataTr {
     } else if (el.applyType == "fieldValue") {
       var f = this.getField(el.fieldName);
       if (f != null) this.value = f[el.fieldName];
+    }else if (el.applyType == "transform") {
+      this.value = new DataTr(this.value,el.transform,this.fields).process();
+      var tmp = "";
     }
+
+   
   }
 
   /** apply % calculation value to */
@@ -366,7 +382,8 @@ class DataTr {
   subString(el) {
     if (el.getType === "before") {
       var i = this.value.indexOf(el.findString);
-      this.value = this.value.substr(0, i);
+      if(i > 0)
+        this.value = this.value.substr(0, i);
     }
     if (el.getType === "after") {
       var i = this.value.indexOf(el.findString);      

@@ -1,17 +1,26 @@
 const conf = require('../config.json').config;
 const parser = require('./parser');
+const pipe = require('./pipe');
 
 
 
 var scrape = async function(url, pipeConf){
      
+    var browserType = conf.scraper.browser;
+    
+
     if(pipeConf !== undefined){
+
+      //override global browser config
+      if(pipeConf.browser !== undefined){
+        browserType = pipeConf.browser;
+      }
       var html ="";
-      if(conf.scraper.browser === 'simple')
+      if(browserType === 'simple')
           html = await simpleBrowser(url,pipeConf);
-      else if(conf.scraper.browser === 'puppeteer')
+      else if(browserType === 'puppeteer')
           html = await puppetterBrowser(url,pipeConf);
-      else if(conf.scraper.browser === 'api')
+      else if(browserType === 'api')
           html = await apiBrowser(url,pipeConf);
   
       return await parser.autoParse(url, html, pipeConf);

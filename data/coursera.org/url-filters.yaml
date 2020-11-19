@@ -1,32 +1,39 @@
 ---
-- courses:
-  regexes:
-    - https://www.coursera.org/browse/.*
-  pipes:
-  - version: 0.1
-    name: courses
-    default: true
-    rules:
-      - coursera.org/courses
-- course:
-  regexes:
-    - (http.*)(coursera.org/learn.*)
-    - https://*.coursera.org/learn/.*
-  wait:
+filters:
+- filter: https://www.coursera.org/browse/.*
+  pipe: courses
+
+- filter: (http.*)(coursera.org/learn.*)
+  pipe: course
+- filter: https://*.coursera.org/learn/.*
+  pipe: course
+
+
+
+### Scraping pipes & Browser Wait rules
+pipes:
+
+  ### Courses list
+  courses:
+    scrapers:
+    - coursera.org/courses
+    wait:
     waitSelectors:           
               - "div.rc-XdpSection.cdp-about > div > div > div > div"
               - "#main"
     waitTimeout: 30000
     waitVisibility: false
     waitType: first
-  pipes:
-  - version: 0.1
-    name: course
-    default: true
-    rules:
-      - coursera.org/courseDetail
-  - version: 0.0.1
-    name: course
-    default: false
-    rules:
-      - coursera.org/courseDetail
+
+  ### single course
+  course:
+    scrapers:
+    - coursera.org/courseDetail
+    wait:
+    waitSelectors:           
+              - "div.rc-XdpSection.cdp-about > div > div > div > div"
+              - "#main"
+    waitTimeout: 30000
+    waitVisibility: false
+    waitType: first    
+

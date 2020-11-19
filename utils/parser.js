@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 var transform = require("./transform");
 var er = require("./retMessages");
 var tpl = require("./templatesJoiner");
+var defTypes = require("./defaultTypes");
 const { PRIORITY_BELOW_NORMAL } = require("constants");
 const { group } = require("console");
 
@@ -20,7 +21,7 @@ var autoParse = async (url, html, pipeConf) => {
    
       //RUN PIPE
       if (pipeConf !== undefined || pipeConf !== "") {
-        if (pipeConf.pipes !== null) {
+        if (pipeConf.scrapers !== null) {
           return await performPipe(pipeConf, html,pipeConf.domain);
         }
         else return er.err("Cannot find any pipe for url: " + url);
@@ -37,7 +38,7 @@ var performPipe = async (pipeConf, html,domain) => {
   var pipeResult = [{}];
   data = [];
 
-  for await (const pipeRule of pipeConf.rules) {
+  for await (const pipeRule of pipeConf.scrapers) {
     //Load rule
     var rule = loader.getParseRule(pipeRule);
    
@@ -167,11 +168,11 @@ var keyValJson = function (key, value) {
   return o;
 };
 
-var parseBasic = function (item) {
-  var node = getFirstNode(item.css.selectors);
+var parseBasic = function (item) {  
+  var node = getFirstNode(item.selectors);
   var value = getNodeValue(
-    item.css.returnType,
-    item.css.attributeTag,
+    item.returnType,
+    item.attributeTag,
     node,
     0,
     item.staticVal,
@@ -183,14 +184,14 @@ var parseBasic = function (item) {
 };
 var parseMultiple = function (item) {
   //get all nodes
-  var nodes = getNodes(item.css.selectors);
+  var nodes = getNodes(item.selectors);
 
   //Apply rule
   var values = [];
   $(nodes).each(function (i, node) {
     var value = getNodeValue(
-      item.css.returnType,
-      item.css.attributeTag,
+      item.returnType,
+      item.attributeTag,
       $(node),
       0,
       item.staticVal,
@@ -206,14 +207,14 @@ var parseMultiple = function (item) {
 /** foreach node search attribute except excluded */
 var parseMultipleByTag = function (item) {
   //get all nodes
-  var nodes = getNodes(item.css.selectors);
+  var nodes = getNodes(item.selectors);
 
   //Apply rule
   var values = {};
   $(nodes).each(function (i, node) {
     var value = getNodeValue(
-      item.css.returnType,
-      item.css.attributeTag,
+      item.returnType,
+      item.attributeTag,
       $(node),
       0,
       item.staticVal,
@@ -222,9 +223,9 @@ var parseMultipleByTag = function (item) {
 
     if (value === undefined) value = "";
 
-    item.css.attributeTagKeys.forEach((k) => {
+    item.attributeTagKeys.forEach((k) => {
       var key = getNodeValue(
-        item.css.returnType,
+        item.returnType,
         k,
         $(node),
         0,
@@ -232,7 +233,7 @@ var parseMultipleByTag = function (item) {
         item.emptyVal
       );
       if (key !== undefined) {
-        if (!item.css.exclude.includes(key)) {
+        if (!item.exclude.includes(key)) {
           values[key] = transform.transform(value, item.transform, result);
         }
       }
@@ -244,26 +245,26 @@ var parseMultipleByTag = function (item) {
 /** foreach node search attribute except excluded */
 var parseMultipleKeyVal = function (item) {
   //get all nodes
-  var nodes = getNodes(item.css.selectors);
+  var nodes = getNodes(item.selectors);
 
   //Apply rule
   var values = {};
   $(nodes).each(function (i, node) {
     
-    var keyNode = $(node).find(item.css.keySelector);
+    var keyNode = $(node).find(item.keySelector);
     var key = getNodeValue(
-      item.css.returnType,
-      item.css.attributeTag,
+      item.returnType,
+      item.attributeTag,
       $(keyNode),
       0,
       item.staticVal,
       item.emptyVal
     );
 
-    var valueNode = $(node).find(item.css.valueSelector);
+    var valueNode = $(node).find(item.valueSelector);
     var value = getNodeValue(
-      item.css.returnType,
-      item.css.attributeTag,
+      item.returnType,
+      item.attributeTag,
       $(valueNode),
       0,
       item.staticVal,
@@ -274,7 +275,7 @@ var parseMultipleKeyVal = function (item) {
 
     var _key = item.name + '/' + key;
     key = transform.transform(key, item.transform, result);
-    if(item.css.removeKeySpaces === true)
+    if(item.removeKeySpaces === true)
        key = key.replace(' ','');
     values[key] = transform.transform(value, item.transform, result);;
 
@@ -284,7 +285,7 @@ var parseMultipleKeyVal = function (item) {
 
 var parseSubFields = function (item) {
   //get all nodes
-  var nodes = getNodes(item.css.selectors);
+  var nodes = getNodes(item.selectors);
 
   var data = [];
   //Apply rule
@@ -293,19 +294,25 @@ var parseSubFields = function (item) {
     if (item.fields !== undefined) {
       item.fields.forEach(function (field) {
         
+        field = defTypes.applyDefaults("basic",field);
         var n = node;
-        if(field.css.selectors !== undefined && field.css.selectors.length > 0)
-          n = getFirstNodeCustom(field.css.selectors,node);
+        if(field.selectors !== undefined && field.selectors.length > 0)
+          n = getFirstNodeCustom(field.selectors,node);
         
         var value = getNodeValue(
-          field.css.returnType,
-          field.css.attributeTag,
+          field.returnType,
+          field.attributeTag,
           n,
           nodes.length,
           field.staticVal,
           field.emptyVal
         );
-        value = transform.transform(value, field.transform, result);
+
+        if(field.transform !== undefined && field.transform.length > 0){
+          value = transform.transform(value, field.transform, result);
+        }
+
+        
         subFields.push(keyValJson(field.name, value));
       });
     }
@@ -324,15 +331,15 @@ var parse = (rule, $) => {
     rule.data.forEach(function (item) {
       var val = undefined;
       if (item.type == "basic") {
-        val = parseBasic(item);
+        val = parseBasic(defTypes.applyDefaults("basic",item));
       } else if (item.type == "multiple") {
-        val = parseMultiple(item);
+        val = parseMultiple(defTypes.applyDefaults("multiple",item));
       } else if (item.type == "multipleByTag") {
-        val = parseMultipleByTag(item);
+        val = parseMultipleByTag(defTypes.applyDefaults("multipleByTag",item));
       } else if (item.type == "multipleKeyVal") {
-        val = parseMultipleKeyVal(item);
+        val = parseMultipleKeyVal(defTypes.applyDefaults("multipleKeyVal",item));
       } else if (item.type == "subFields") {
-        val = parseSubFields(item);
+        val = parseSubFields(defTypes.applyDefaults("subFields",item));
       }
 
       if(val[item.name] === undefined)

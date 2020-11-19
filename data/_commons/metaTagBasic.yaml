@@ -1,0 +1,17 @@
+---
+data:
+- name: meta
+  type: multipleByTag
+  selectors:
+    - meta
+  returnType: attribute
+  attributeTag: content
+  attributeTagKeys:
+    - name
+    - property
+  exclude:
+    - keywords
+    - description
+    - base
+  transform:
+  - $trim

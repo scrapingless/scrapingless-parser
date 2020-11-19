@@ -1,12 +1,2 @@
 ---
-removeReturn:
-  rule: regexReplace
-  regexRules:
-  - |-
-    \
-    +/gi
-  type: replace
-  replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal
+

@@ -1,16 +1,4 @@
 ---
-removeReturn:
-  rule: regexReplace
-  regexRules:
-  - |-
-    \
-    +/gi
-  type: replace
-  replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal
-    
 commonReplace:
   rule: regexReplace
   regexRules:
@@ -18,6 +6,3 @@ commonReplace:
   - ","
   type: replace
   replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal

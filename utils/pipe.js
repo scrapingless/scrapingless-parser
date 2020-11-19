@@ -1,9 +1,5 @@
-var fs = require("fs");
+
 const extractDomain = require("extract-domain");
-var er = require("./retMessages");
-var tpl = require("./templatesJoiner");
-const { PRIORITY_BELOW_NORMAL } = require("constants");
-const { group } = require("console");
 
 
 var loaderType = process.env.LOADERTYPE || 'fileLoaderYaml';
@@ -17,22 +13,27 @@ var getPipeConf = async (url,parseType,ruleName,version) => {
     if (urlFilter !== undefined && urlFilter !== null) {
       //find pipe to apply
       var pipeConf = "";
-      for (let i = 0; i < urlFilter.length; i++) {
-        const el = urlFilter[i];
+      var x = urlFilter['filters'];
+      for (let i = 0; i < urlFilter.filters.length; i++) {
+        const el =  urlFilter.filters[i];
 
-        var urlMatch = false;
-        for (let x = 0; x < el.regexes.length; x++) {
-          const r = el.regexes[x];
-          var re = new RegExp(r, "gim");
+        var urlMatch = false; 
+        var re = new RegExp(el.filter, "gim");
 
-          if(url.match(re))
-            urlMatch = true;
-        }
+        if(url.match(re))
+          urlMatch = true;
+        
 
         if(parseType === "direct")
             urlMatch = true;
 
         if(urlMatch === true){
+          pipeConf = urlFilter.pipes[el.pipe];
+          pipeConf.domain = domain;
+          pipeConf.browser = el.browser; 
+        }
+
+        /*if(urlMatch === true){
             for (let y = 0; y < el.pipes.length; y++) {
                 var aPipe = el.pipes[y];
     
@@ -54,19 +55,20 @@ var getPipeConf = async (url,parseType,ruleName,version) => {
                     break;
                 }
               }
-        }
+        }*/
 
-        if (pipeConf != "") {
-            pipeConf.domain = domain;
+        if (pipeConf !== "") {            
             return pipeConf;
         }
           
       }
+      return undefined;
     }
 
   } catch (error) {
     return undefined;
   }
+ 
 }
 
 

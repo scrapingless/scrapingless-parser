@@ -1,46 +1,61 @@
 ---
 data:
+- name : author/link
+  type: $attr
+  attributeTag: href
+  selectors:
+    - div.dm.w.n > div > div > span > a
+  transform:
+  - prepend:
+    value: https://medium.com
+
+
+# Parse list of articles and foreach "block" extract title,summary,author,link
 - type: subFields
   name: articles
-  css:
-    returnType: text
-    selectors:
+  returnType: text
+  selectors:
     - div.es.et.s > section
     - "section >  div > section > div:nth-child(1)"
-  emptyVal: ''
-  transform: []
   fields:
   - name: title
-    css:
-      returnType: text
-      selectors:
+    returnType: text
+    selectors:
       - div h3
     emptyVal: none
   - name: summary
-    css:
-      returnType: text
-      selectors:
+    returnType: text
+    selectors:
       - div > div > div 
-      - div > section > div > div > div > div      
-    emptyVal: ''
-    transform: []
+      - div > section > div > div > div > div  
   - name: author
-    css:
-      returnType: text
-      selectors:
+    returnType: text
+    selectors:
+      -  div:nth-child(2) > div > div:nth-child(1)  a
       -  div > section > div  > div:nth-child(2) > div > div > div
       -  div:nth-child(2) > div > div > div > a
-    emptyVal: ''
-    transform: []
+  - name: authorLink
+    returnType: text
+    selectors:
+      -  div:nth-child(2) > div > div:nth-child(1)  a
+    attributeTag: href
   - name: link
-    css:
-      returnType: attribute
-      selectors:
+    returnType: attribute
+    selectors:
       - div h3 > a
-      attributeTag: href
+    attributeTag: href
     emptyVal: ''
     transform:
-    - rule: appendPrepend
-      type: prepend
-      valueType: static
-      value: https://medium.com
+      #if link start with '/' => transform => prepend https://medium.com'
+      - rule: ifRule
+        checkType: customVal
+        caseInsensitive: true
+        type: startWith
+        applyType: transform
+        checkCustomVal: "/"
+        transform:
+        - $prepend:
+            value: https://medium.com
+      #trim link by ? (medium.com/article-title?var=test => medium.com/article-title)
+      - $subStringBefore:
+         findString: "?"

@@ -7,9 +7,6 @@ removeReturn:
     +/gi
   type: replace
   replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal
 authorCleaner:
   rule: regexReplace
   regexRules:
@@ -24,6 +21,3 @@ authorCleaner:
   - "&0more/gi"
   type: replace
   replaceVal: ''
-  onerror:
-    customVal: ''
-    type: customVal

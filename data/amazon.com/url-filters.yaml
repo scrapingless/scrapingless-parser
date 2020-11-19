@@ -1,12 +1,17 @@
 ---
-- bookDemo:
-  regexes:
-  - amazon.com/(.*)$
-  pipes:
-  - version: 0.1
-    name: bookDemo
-    default: true
-    rules:
-    - _commons/headBase
-    - _commons/metaTagBasic
-    - amazon.com/bookDemo
+filters:
+- filter: amazon.com/(.*)$
+  pipe: BookDemo 
+
+
+
+### Scraping pipes & Browser Wait rules
+pipes:
+
+  ### Courses list
+  BookDemo:
+    scrapers:
+      - _commons/headBase
+      - _commons/metaTagBasic
+      - amazon.com/bookDemo
+

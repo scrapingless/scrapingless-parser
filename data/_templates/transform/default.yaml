@@ -1,0 +1,87 @@
+---
+
+#TRIM
+$trim:
+  rule : trim
+  type: both
+
+$trimL:
+  rule : trim
+  type: left
+
+$trimR:
+  rule : trim
+  type: right
+
+#SUBSTRING
+$subStringAfter:
+  rule : subString
+  findString: ''
+  getType: after
+  onerror:
+    customVal: ""
+    type: customVal
+
+$subStringBefore:
+  rule : subString
+  findString: ''
+  getType: before
+  onerror:
+    customVal: ""
+    type: customVal
+
+$subStringBeforeFromEnd:
+  rule : subString
+  findString: ''
+  getType: beforeFromEnd
+  onerror:
+    customVal: ""
+    type: customVal
+
+$subStringAfterFromEnd:
+  rule : subString
+  findString: ''
+  getType: afterFromEnd
+  onerror:
+    customVal: ""
+    type: customVal
+  
+#Appen Prepend
+
+$append:
+  rule: appendPrepend
+  type: append
+  valueType: static
+
+$prepend:
+  rule: appendPrepend
+  type: prepend
+  valueType: static
+  
+
+## remove \n from string
+$removeReturn:
+  rule: regexReplace
+  regexRules:
+  - |-
+    \
+    +/gi
+  type: replace
+  replaceVal: ''
+  onerror:
+    customVal: ''
+    type: customVal
+authorCleaner:
+  rule: regexReplace
+  regexRules:
+  - |-
+    \
+    by+/g
+  - |-
+    \
+    +/g
+  type: replace
+  replaceVal: ''
+  onerror:
+    customVal: ''
+    type: customVal

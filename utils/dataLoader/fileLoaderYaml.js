@@ -1,5 +1,8 @@
 var fs = require('fs');
+var glob = require('glob');
 const yaml = require('js-yaml');
+var _ = require('underscore');
+
 var confPath = process.env.CONFPATH || process.env.PWD + '/data/';
 
     
@@ -47,10 +50,22 @@ var confPath = process.env.CONFPATH || process.env.PWD + '/data/';
         
     };
 
-    var getFieldTemplates =  (domain) => {
+    
+
+    var getTemplates =  (domain,type) => {
         try {
-            var tpl = confPath + domain + '/templates/fields.yaml';
-            var data = yaml.safeLoad(fs.readFileSync(tpl));
+
+            var data = {};
+           // glob.sync(path, {}, (err, files)=>{fieldsFiles=files;});
+            var files = glob.sync(confPath + '_templates/'+type+'/*.yaml');
+            files.forEach(file => {
+                var globalTemplate = yaml.safeLoad(fs.readFileSync(file));
+                data =  _.extend({},data,globalTemplate);
+            });
+
+           
+            var localTemplate = yaml.safeLoad(fs.readFileSync(confPath + domain + '/templates/'+type+'.yaml'));
+            data =  _.extend({},data,localTemplate);
             return data;
         } catch (error) {
             return undefined;
@@ -62,6 +77,5 @@ var confPath = process.env.CONFPATH || process.env.PWD + '/data/';
  module.exports = {
     getParseFilter:getParseFilter,
     getParseRule : getParseRule,
-    getTransformTemplates: getTransformTemplates,
-    getFieldTemplates:getFieldTemplates
+    getTemplates
 }
