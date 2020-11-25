@@ -11,7 +11,7 @@ pipes:
   ### Courses list
   BookDemo:
     scrapers:
-      - _commons/headBase
-      - _commons/metaTagBasic
+      - z_commons/headBase
+      - z_commons/metaTagBasic
       - amazon.com/bookDemo
 

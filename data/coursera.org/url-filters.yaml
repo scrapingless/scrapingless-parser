@@ -18,22 +18,23 @@ pipes:
     scrapers:
     - coursera.org/courses
     wait:
-    waitSelectors:           
-              - "div.rc-XdpSection.cdp-about > div > div > div > div"
-              - "#main"
-    waitTimeout: 30000
-    waitVisibility: false
-    waitType: first
+      waitSelectors:           
+                - "div.rc-XdpSection.cdp-about > div > div > div > div"
+                - "#main"
+      waitTimeout: 30000
+      waitVisibility: false
+      waitType: first
 
   ### single course
   course:
     scrapers:
     - coursera.org/courseDetail
     wait:
-    waitSelectors:           
-              - "div.rc-XdpSection.cdp-about > div > div > div > div"
-              - "#main"
-    waitTimeout: 30000
-    waitVisibility: false
-    waitType: first    
+      waitSelectors:   
+                - ".banner-title"        
+                - "div.rc-XdpSection.cdp-about > div > div > div > div"
+                - "#main"
+      waitTimeout: 30000
+      waitVisibility: false
+      waitType: first    
 

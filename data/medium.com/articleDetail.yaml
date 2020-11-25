@@ -1,17 +1,17 @@
 ---
 data:
 - name : articleTitle
-  type: $text
+  type: text
   selectors:
    - body  h1:nth-child(1)
 
 - name : author/name
-  type: $text
+  type: text
   selectors:
   - div.dm.w.n > div > div > span > a > h4
 
 - name : author/link
-  type: $attr
+  type: attr
   attributeTag: href
   selectors:
     - div.dm.w.n > div > div > span > a
@@ -20,11 +20,11 @@ data:
     value: https://medium.com
 
 - name : paragraphs
-  type: $text
+  type: text
   selectors:
     - article > div > section > div > div p
 
 - name : claps
-  type: $text
+  type: text
   selectors:
   - div.s.kj.kk.kl.km.ll.lm.ln.lo.lp.lq > div > h4 > button

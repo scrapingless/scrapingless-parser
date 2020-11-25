@@ -3,7 +3,7 @@ data:
 
 
 
-- type: bookBasicClean
+- type: text
   name: book/title
   selectors:
   - "#productTitle"
@@ -14,7 +14,7 @@ data:
     type: replace
     replaceVal: ''
 
-- type: $text
+- type: text
   name: book/ratingsNumber
   selectors:
   - "#acrCustomerReviewText"
@@ -28,13 +28,13 @@ data:
         type: customVal
 
 
-- type: $text
+- type: text
   name: book/price
   selectors:
   - "#price"
   - "#newBuyBoxPrice"
 
-- type: $text
+- type: text
   name: book/availability
   selectors:
   - "#availability > span"
@@ -51,9 +51,9 @@ data:
       customVal: ''
       type: customVal
 
-- type: multiple
+- type: array
   name: book/authors2
-  returnType: text
+  valueType: text
   selectors:
     - "#bylineInfo > span > span > a"
     - "#bylineInfo > span > a"
@@ -63,16 +63,16 @@ data:
 
 
 
-- type: $text
+- type: text
   name: book/authorAbout
   selectors:
   - "#authorBio"
   - "#editorialReviews_feature_div > div.a-section.a-spacing-small.a-padding-base
     > div > div"
 
-- type: multipleKeyVal
+- type: keyVal
   name: book/details
-  returnType: text
+  valueType: text
   selectors:
     - "#detailBullets_feature_div > ul > li"
   keySelector: span > span:nth-child(1)
@@ -82,9 +82,9 @@ data:
   transform:
   - authorCleaner
   
-- type: multipleKeyVal
+- type: keyVal
   name: book/reviews
-  returnType: text
+  valueType: text
   selectors:
     - "#cm-cr-dp-review-list > div"
   keySelector: div > div:nth-child(1) > div:nth-child(1) > a > div:nth-child(2)

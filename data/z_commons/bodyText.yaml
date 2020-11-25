@@ -1,9 +1,8 @@
 ---
 data:
 - name: body/text
-  type: basic
+  type: text
   selectors:
     - body
-  returnType: text
   transform:
   - $trim

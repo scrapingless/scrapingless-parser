@@ -1,6 +1,6 @@
 {
     "config" :{       
-        "dataLoader" : "fileLoaderYaml",
+        "dataLoader" : "yamlLoader",
         "scraper": {
             "browser" : "puppeteer",
             "apiUrl": "",
@@ -11,7 +11,7 @@
                 "url" : ""
             },
             "puppeteerLaunchConf": {
-                "headless": true,
+                "headless": false,
                 "args": ["--disable-setuid-sandbox","--disable-extensions"],
                 "ignoreHTTPSErrors": true,
                 "defaultViewport": {

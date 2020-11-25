@@ -3,6 +3,9 @@ var defTypes = require("./defaultTypes");
 var value = value;
 var rule = rule;
 
+/**
+ * Manage single value data transformation using configured "transformation rule"
+ */
 class DataTr {
   constructor(value, rule, fields) {
     this.value = value;
@@ -237,7 +240,7 @@ class DataTr {
     }
   }
 
-  /**Action if */
+  /**Conditional Action if > then */
   ifRule(el) {
     //get value from to check
     var val = "";
@@ -325,7 +328,7 @@ class DataTr {
     }
   }
 
-  /* */
+  /* apply match or regex */
   regexReplace(el) {
     el.regexRules.forEach((regexRule) => {
       var s = this.value.toString();
@@ -365,6 +368,7 @@ class DataTr {
     });
   }
 
+  /* Trim */
   trimmer(el) {
     if (el.type == "both") {
       this.value = this.value.trim(el.value);
@@ -379,6 +383,7 @@ class DataTr {
     }
   }
 
+  /* apply substring substitutions */
   subString(el) {
     if (el.getType === "before") {
       var i = this.value.indexOf(el.findString);

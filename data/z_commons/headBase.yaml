@@ -1,10 +1,9 @@
 ---
 data:
 - name: head/pageTitle
-  type: basic
+  type: text
   selectors:
     - title
-  returnType: text
   transform:
   - rule: split
     splitSeparator: ","
@@ -16,29 +15,26 @@ data:
   - rule: trim
     type: both
 - name: head/description
-  type: basic
+  type: attr
   selectors:
     - meta[name="description"]
-  returnType: attribute
   attributeTag: content
   transform:
   - rule: trim
     type: both
 - name: head/canonical
-  type: basic
+  type: attr
   selectors:
     - link[rel="canonical"]
-  returnType: attribute
   attributeTag: href
   transform:
   - rule: trim
     type: both
 - name: head/keywords
-  type: basic
+  type: attr
   selectors:
     - meta[name="Keywords"]
     - meta[name="keywords"]
-  returnType: attribute
   attributeTag: content
   transform:
   - rule: trim

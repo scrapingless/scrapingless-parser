@@ -1,7 +1,7 @@
 ---
 data:
 
-- type: $html
+- type: html
   name: _nextPage
   selectors:
     - head
@@ -19,14 +19,14 @@ data:
     replaceVal: ''
 
 
-- type: subFields
+- type: container
   name: courses
-  returnType: text
+  valueType: text
   selectors:
     - div._1wortd1n
   fields:
   - name: badge
-    returnType: text
+    type: text
     selectors:
       - div:nth-child(3) > div > span
     emptyVal: none
@@ -34,14 +34,14 @@ data:
     - rule: caseLowerUpper
       type: lower
   - name: title
-    returnType: text
+    type: text
     selectors:
       - div:nth-child(4) > div:nth-child(1) > div
   - name: university
-    returnType: text
+    type: text
     selectors:
       - div:nth-child(4) > div:nth-child(2) > div
   - name: courseType
-    returnType: text
+    type: text
     selectors:
       - div:nth-child(5)  >  div

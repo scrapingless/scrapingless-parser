@@ -3,7 +3,10 @@ const parser = require('./parser');
 const pipe = require('./pipe');
 
 
-
+/**
+ *  Perform html data scraping using a configured browser
+ * Load Html and run "Parser/pipe"
+ */
 var scrape = async function(url, pipeConf){
      
     var browserType = conf.scraper.browser;
@@ -28,18 +31,37 @@ var scrape = async function(url, pipeConf){
     else return {"error": "pipe not found"};
 }
 
-var puppetterBrowserx = async function(url,pipeConf){
-  const puppeteer = require('puppeteer');
-  var browser = await puppeteer.launch({headless:false})
-  let page = await browser.newPage();
-  await page.goto(url);
-  const html = await page.evaluate(() => document.querySelector('*',{timeout:90000}).outerHTML);
-  //await page.close();
-  //var html = await page.content();
-  //await browser.close();
-  return html;
+/**
+ *  Perform html data scraping using a configured browser
+ * return html
+ */
+var html = async function(url, pipeConf){
+     
+  var browserType = conf.scraper.browser;
+  
+
+  if(pipeConf !== undefined){
+
+    //override global browser config
+    if(pipeConf.browser !== undefined){
+      browserType = pipeConf.browser;
+    }
+  }
+    var html ="";
+    if(browserType === 'simple')
+        return await simpleBrowser(url,pipeConf);
+    else if(browserType === 'puppeteer')
+        return await puppetterBrowser(url,pipeConf);
+    else if(browserType === 'api')
+        return await apiBrowser(url,pipeConf);
+
+    return "";
 }
 
+
+/**
+ * Get Html using puppetter Browser
+ */
 var puppetterBrowser = async function(url,pipeConf){
   let browser = undefined;
     try {
@@ -59,7 +81,7 @@ var puppetterBrowser = async function(url,pipeConf){
         await page.goto(url);
 
         
-        if(pipeConf !== undefined){
+        if(pipeConf !== undefined && pipeConf.wait !== undefined){
             if(pipeConf.wait.waitSelectors !== undefined){
                 if(pipeConf.wait.waitSelectors.length > 0){
                 if(pipeConf.wait.waitType === 'first'){
@@ -101,15 +123,13 @@ var puppetterBrowser = async function(url,pipeConf){
                 }   
             }
             
-             //get HTML
-            const html = await page.evaluate(() => document.querySelector('*').outerHTML);
-            await page.close();
-            await browser.close();
-            return html;
+           
         }
-
-
-        return "";
+        //get HTML
+        const html = await page.evaluate(() => document.querySelector('*').outerHTML);
+        await page.close();
+        await browser.close();
+        return html;
        
     } catch (error) {
         if(browser !== undefined){
@@ -118,11 +138,14 @@ var puppetterBrowser = async function(url,pipeConf){
           } catch (error) {            
           }
         }
-        return "";
+        return "error: " + error;
     }
     
 }
 
+/**
+ * load puppetter wait options
+ */
 var getWaitOptions = function(pipeConf){
     var waitOptions = {visible: true,timeout:30000};
     if(pipeConf.wait.waitTimeout !== undefined)
@@ -131,7 +154,9 @@ var getWaitOptions = function(pipeConf){
            waitOptions.visible = pipeConf.wait.waitVisibility;
     return waitOptions;
 }
-
+/**
+ * Get Html using external endpoint
+ */
 var apiBrowser = async function(url){
     var axios = require('axios');
     var html ="";
@@ -159,6 +184,9 @@ var apiBrowser = async function(url){
     return data;
 }
 
+/**
+ * Get Html using axios
+ */
 var simpleBrowser = async function(url){
     var axios = require('axios');
     const extractDomain = require("extract-domain");
@@ -179,5 +207,6 @@ var simpleBrowser = async function(url){
   };
 
 module.exports = {
-    scrape
+    scrape,
+    html
   };

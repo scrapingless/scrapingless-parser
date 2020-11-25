@@ -1,7 +1,7 @@
 ---
 bookBasicClean:
   type: basic
-  returnType: text
+  valueType: text
   emptyVal: ''
   transform:
   - removeReturn

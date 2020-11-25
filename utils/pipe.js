@@ -1,10 +1,18 @@
 
 const extractDomain = require("extract-domain");
 
-
-var loaderType = process.env.LOADERTYPE || 'fileLoaderYaml';
+/** 
+ * Define witch configuration loader use
+ * Default: yamlLoader
+ * TODO: create loader for mongodb or other databases 
+ */
+var loaderType = process.env.LOADERTYPE || 'yamlLoader';
 var loader = require("./dataLoader/" + loaderType);
 
+
+/**
+ * Load pipe to run 
+ */
 var getPipeConf = async (url,parseType,ruleName,version) => {
   try {
     var domain = extractDomain(url);
@@ -32,30 +40,7 @@ var getPipeConf = async (url,parseType,ruleName,version) => {
           pipeConf.browser = el.browser; 
         }
 
-        /*if(urlMatch === true){
-            for (let y = 0; y < el.pipes.length; y++) {
-                var aPipe = el.pipes[y];
-    
-                if (parseType === "auto" && aPipe.default === true) {
-                    pipeConf = el;
-                    pipeConf = {...el,...aPipe};
-                    delete pipeConf.pipes;
-                    break;
-                } else if (aPipe.name == ruleName && aPipe.version == version) {
-                    pipeConf = el;
-                    pipeConf = {...el,...aPipe};
-                    delete pipeConf.pipes;
-                    break;
-                }
-                 else if (parseType === "direct" && aPipe.name == ruleName && aPipe.version == version) {
-                   pipeConf = el;
-                    pipeConf = {...el,...aPipe};
-                    delete pipeConf.pipes;
-                    break;
-                }
-              }
-        }*/
-
+        
         if (pipeConf !== "") {            
             return pipeConf;
         }

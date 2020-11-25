@@ -11,11 +11,16 @@ const { group } = require("console");
 var $ = cheerio.load("");
 var result = [];
 
-var loaderType = process.env.LOADERTYPE || 'fileLoaderYaml';
+/** 
+ * Define witch configuration loader use
+ * Default: YamlLoader
+ * TODO: create loader for mongodb or other databases 
+ */
+var loaderType = process.env.LOADERTYPE || 'yamlLoader';
 var loader = require("./dataLoader/" + loaderType);
 
 
-
+/** parse any url using a pipe configuration (see pipe.js) */
 var autoParse = async (url, html, pipeConf) => {
   try {
    
@@ -62,7 +67,40 @@ var performPipe = async (pipeConf, html,domain) => {
   //return   await arrayToJson(await data);
 };
 
+//SINGLE RULE PARSE
+var parse = (rule, $) => {
+  result = [];
+  groups = {};
+  //Fields
+  if (rule.data !== undefined) {
+    rule.data.forEach(function (item) {
+      var val = undefined;
+      if (["html","text","attr","static"].includes(item.type)) {
+        val = parseBasic(defTypes.applyDefaults("basic",item));
+      } else if (item.type == "array") {
+        val = parseArray(defTypes.applyDefaults("array",item));
+      } else if (item.type == "attrFilter") {
+        val = parseAttrFilter(defTypes.applyDefaults("attrFilter",item));
+      } else if (item.type == "keyVal") {
+        val = parseKeyVal(defTypes.applyDefaults("keyVal",item));
+      } else if (item.type == "container") {
+        val = parseContainer(defTypes.applyDefaults("container",item));
+      }
 
+      if(val[item.name] === undefined)
+        val[item.name] = "";
+
+      //grouping
+      if (item.name.includes("/")) {
+        var steps = item.name.split("/");
+        groups = initGroups(steps, groups, steps.length, val[item.name]);
+      } else result.push(val);
+    });
+  }
+
+  if (groups !== {}) result.push(groups);
+  return result;
+};
 
 //Merge arrays to json
 var arrayToJson = async function (arr) {
@@ -114,7 +152,7 @@ var getNodeValue = function (
   try {
     if (type == "text") {
       return emptyValueCheck($(node).text(), emptyVal);
-    } else if (type == "attribute") {
+    } else if (type == "attr") {
       return emptyValueCheck($(node).attr(attrName), emptyVal);
     } else if (type == "html") {
       return emptyValueCheck($(node).html(), emptyVal);
@@ -171,7 +209,7 @@ var keyValJson = function (key, value) {
 var parseBasic = function (item) {  
   var node = getFirstNode(item.selectors);
   var value = getNodeValue(
-    item.returnType,
+    item.type,
     item.attributeTag,
     node,
     0,
@@ -182,7 +220,7 @@ var parseBasic = function (item) {
   value = transform.transform(value, item.transform, result);
   return keyValJson(item.name, value);
 };
-var parseMultiple = function (item) {
+var parseArray = function (item) {
   //get all nodes
   var nodes = getNodes(item.selectors);
 
@@ -190,7 +228,7 @@ var parseMultiple = function (item) {
   var values = [];
   $(nodes).each(function (i, node) {
     var value = getNodeValue(
-      item.returnType,
+      item.valueType,
       item.attributeTag,
       $(node),
       0,
@@ -205,7 +243,7 @@ var parseMultiple = function (item) {
 };
 
 /** foreach node search attribute except excluded */
-var parseMultipleByTag = function (item) {
+var parseAttrFilter = function (item) {
   //get all nodes
   var nodes = getNodes(item.selectors);
 
@@ -213,7 +251,7 @@ var parseMultipleByTag = function (item) {
   var values = {};
   $(nodes).each(function (i, node) {
     var value = getNodeValue(
-      item.returnType,
+      item.type,
       item.attributeTag,
       $(node),
       0,
@@ -225,7 +263,7 @@ var parseMultipleByTag = function (item) {
 
     item.attributeTagKeys.forEach((k) => {
       var key = getNodeValue(
-        item.returnType,
+        item.type,
         k,
         $(node),
         0,
@@ -243,7 +281,7 @@ var parseMultipleByTag = function (item) {
 };
 
 /** foreach node search attribute except excluded */
-var parseMultipleKeyVal = function (item) {
+var parseKeyVal = function (item) {
   //get all nodes
   var nodes = getNodes(item.selectors);
 
@@ -253,7 +291,7 @@ var parseMultipleKeyVal = function (item) {
     
     var keyNode = $(node).find(item.keySelector);
     var key = getNodeValue(
-      item.returnType,
+      item.type,
       item.attributeTag,
       $(keyNode),
       0,
@@ -263,7 +301,7 @@ var parseMultipleKeyVal = function (item) {
 
     var valueNode = $(node).find(item.valueSelector);
     var value = getNodeValue(
-      item.returnType,
+      item.type,
       item.attributeTag,
       $(valueNode),
       0,
@@ -283,7 +321,8 @@ var parseMultipleKeyVal = function (item) {
   return keyValJson(item.name, values);
 };
 
-var parseSubFields = function (item) {
+/** foreach node in a "container" parse childs */
+var parseContainer = function (item) {
   //get all nodes
   var nodes = getNodes(item.selectors);
 
@@ -300,7 +339,7 @@ var parseSubFields = function (item) {
           n = getFirstNodeCustom(field.selectors,node);
         
         var value = getNodeValue(
-          field.returnType,
+          field.valueType,
           field.attributeTag,
           n,
           nodes.length,
@@ -322,40 +361,7 @@ var parseSubFields = function (item) {
   return keyValJson(item.name, data);
 };
 
-//SINGLE RULE PARSE
-var parse = (rule, $) => {
-  result = [];
-  groups = {};
-  //Fields
-  if (rule.data !== undefined) {
-    rule.data.forEach(function (item) {
-      var val = undefined;
-      if (item.type == "basic") {
-        val = parseBasic(defTypes.applyDefaults("basic",item));
-      } else if (item.type == "multiple") {
-        val = parseMultiple(defTypes.applyDefaults("multiple",item));
-      } else if (item.type == "multipleByTag") {
-        val = parseMultipleByTag(defTypes.applyDefaults("multipleByTag",item));
-      } else if (item.type == "multipleKeyVal") {
-        val = parseMultipleKeyVal(defTypes.applyDefaults("multipleKeyVal",item));
-      } else if (item.type == "subFields") {
-        val = parseSubFields(defTypes.applyDefaults("subFields",item));
-      }
 
-      if(val[item.name] === undefined)
-        val[item.name] = "";
-
-      //grouping
-      if (item.name.includes("/")) {
-        var steps = item.name.split("/");
-        groups = initGroups(steps, groups, steps.length, val[item.name]);
-      } else result.push(val);
-    });
-  }
-
-  if (groups !== {}) result.push(groups);
-  return result;
-};
 
 /** hierarchical json generator
  *  example: from => "data/test/demo"

@@ -1,7 +1,7 @@
 ---
 data:
 - name : author/link
-  type: $attr
+  type: attr
   attributeTag: href
   selectors:
     - div.dm.w.n > div > div > span > a
@@ -11,36 +11,36 @@ data:
 
 
 # Parse list of articles and foreach "block" extract title,summary,author,link
-- type: subFields
+- type: container
   name: articles
-  returnType: text
+  valueType: text
   selectors:
     - div.es.et.s > section
     - "section >  div > section > div:nth-child(1)"
   fields:
   - name: title
-    returnType: text
+    valueType: text
     selectors:
       - div h3
     emptyVal: none
   - name: summary
-    returnType: text
+    valueType: text
     selectors:
       - div > div > div 
       - div > section > div > div > div > div  
   - name: author
-    returnType: text
+    valueType: text
     selectors:
       -  div:nth-child(2) > div > div:nth-child(1)  a
       -  div > section > div  > div:nth-child(2) > div > div > div
       -  div:nth-child(2) > div > div > div > a
   - name: authorLink
-    returnType: text
+    valueType: text
     selectors:
       -  div:nth-child(2) > div > div:nth-child(1)  a
     attributeTag: href
   - name: link
-    returnType: attribute
+    valueType: attribute
     selectors:
       - div h3 > a
     attributeTag: href

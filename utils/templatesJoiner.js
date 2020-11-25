@@ -1,77 +1,43 @@
-
+/**
+ * Utility for overwrites all transformation templates to a full rule value
+ * Substitute each referred template with full configuration
+ */
 var _ = require('underscore');
 var applyTemplates =  function(rule,loader,domain,lev0){
 
-   
-    var ruleTemplate =  loader.getTemplates(lev0,'fields');
-    if(ruleTemplate !== undefined)
-        rule = overwriteRule(rule,ruleTemplate);
-
-    var ttr =  loader.getTemplates(lev0,'transform');
+    var ttr =  loader.getTemplates(lev0);
     if(ttr !== undefined)
         rule = overwriteTransform(rule,ttr);
 
     return rule;
 }
 
-var overwriteRule = function(rule,ruleTemplate){
-    var validTypes = ["basic","multiple", "multipleByTag","multipleKeyVal","subFields"];
-    var data = [];
-   
-    rule.data.forEach(el => {
-   
-        if(!validTypes.includes(el.type)){
-             
-            //template exist
-            var f = JSON.parse(JSON.stringify(ruleTemplate[el.type]));
-            if(f !== undefined){    
-                //f.transform = f.transform.push(el.transform);
-                f = _.extend({},el,f);        
-                //f.name = el.name;
-                //f.selectors = el.selectors;
-
-                if(f.transform === undefined)
-                    f.transform = [];
-                if(el.transform === undefined)
-                    el.transform = [];
-                
-                el.transform.forEach(tr => {
-                    f.transform.push(tr);
-                });
-                
-                data.push(f);
-            }
-            else data.push(el);
-        }
-        else data.push(el);
-
-    });
-    rule.data = data;
-    return rule;
-}
 
 /**
- * Recursive Transformation templates override
- * @param {} transformation 
- * @param {*} ttr 
+ * Apply single transformation overwrite
  */
 var applyTransform = function(transformation,ttr){
     var tr =[];
     var key = Object.keys(transformation)[0];
   
     if(key === '0'){
-        tr.push(ttr[transformation]);
+        //tr.push(ttr[transformation]);
+        return ttr[transformation];
     }
     else if(key !== 'rule'){
-        tr.push( _.extend({},ttr[key],transformation[key])); 
+        return _.extend({},ttr[key],transformation[key]);
+        //tr.push( _.extend({},ttr[key],transformation[key])); 
     }
-    else tr.push(transformation);
+    else {
+        //tr.push(transformation);
+        return transformation;
+    }
    
-    return tr;
 }
 
-var overwriteTransformSubFields = function(el,ttr){
-    if(el.type === "subFields"){
+/** Apply overwrite for all childs of container rule type */
+var overwriteTransformContainer = function(el,ttr){
+    if(el.type === "container"){
         var fields =[];
         el.fields.forEach(field => {
             if(field.transform !== undefined){
@@ -79,20 +45,20 @@ var overwriteTransformSubFields = function(el,ttr){
                 var fieldTr = [];
                 field.transform.forEach(ftr => {
 
-                    tmpTr = applyTransform(ftr,ttr)[0];
-                  
-
-                    var subTr = [];
-                    if(tmpTr.transform !== undefined){
-                        tmpTr.transform.forEach(t => { 
-                            subTr.push(applyTransform(t,ttr)[0]);
-                        });
-                        tmpTr.transform= subTr;
+                    tmpTr = applyTransform(ftr,ttr);
+                    if(tmpTr !== undefined){
+                        var subTr = [];
+                        if(tmpTr.transform !== undefined){
+                            tmpTr.transform.forEach(t => { 
+                                subTr.push(applyTransform(t,ttr));
+                            });
+                            tmpTr.transform= subTr;
+                        }
+    
+                        fieldTr.push(tmpTr);
                     }
-
-                    fieldTr.push(tmpTr);
-                    //tmp.push(overwriteTransform( {"data": [{"transform" : [ftr]}] },ttr).data[0].transform);
-                });
+                    else fieldTr.push(ftr);
+              });
                 
                 
                 field.transform = fieldTr;
@@ -113,7 +79,7 @@ var overwriteTransform = function(rule,ttr){
     rule.data.forEach(el => {
         var tr =[];
   
-        el = overwriteTransformSubFields(el,ttr);
+        el = overwriteTransformContainer(el,ttr);
         if(el.transform !== undefined){
             el.transform.forEach(transformation => {
 

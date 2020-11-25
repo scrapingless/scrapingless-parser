@@ -4,7 +4,7 @@ filters:
   pipe: topicListing
   browser: simple
 
-- filter: '.*\\.medium.com/(.*)$'
+- filter: .*.medium.com/(.*)$
   pipe: articleDetail
 
 
@@ -19,7 +19,7 @@ pipes:
                 - "body"
       waitTimeout: 30000
       waitVisibility: true
-      waitType: all
+      waitType: first
 
   articleDetail:
     scrapers:

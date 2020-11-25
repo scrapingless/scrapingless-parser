@@ -17,6 +17,13 @@ router.post('/scrape/direct', async function(req, res, next) {
     res.send(await scraper.scrape(req.query.url,await pipe.getPipeConf(req.query.url,'direct',req.query.ruleName,req.query.version)));
 });
 
+/** return html using configured browser or default */
+router.post('/html', async function(req, res, next) {
+    res.setHeader('Content-Type', 'application/text');   
+    res.send(await scraper.html(req.query.url,await pipe.getPipeConf(req.query.url,'auto','','',)));
+});
+
+
 /** Parse using default rule by domain */
 router.post('/parse/auto', async function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');   

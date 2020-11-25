@@ -1,9 +1,12 @@
 var _ = require('underscore');
 
+/***
+ * Define default values for rules
+ */
+
 var basic = {
-    "type": "basic",
     "css": {
-      "returnType": "",
+      "valueType": "",
       "selectors": [],
       "attributeTag":""
     },
@@ -12,11 +15,10 @@ var basic = {
     "transform": []
 };
 
-var multipleByTag = {
-    "type" : "multipleByTag",           
+var attrFilter = {         
     "css":{
         "selectors": [],
-        "returnType" : "",
+        "valueType" : "",
         "attributeTag" : "",
         "attributeTagKeys" : [],
         "exclude": []
@@ -25,10 +27,9 @@ var multipleByTag = {
     ]
 };
 
-var multipleKeyVal = {
-    "type": "multipleKeyVal",
+var keyVal = {
     "css": {
-        "returnType": "",            
+        "valueType": "",            
         "selectors": [],
         "keySelector" : "",
         "valueSelector" : "",
@@ -40,10 +41,9 @@ var multipleKeyVal = {
     ]
 };
 
-var subFields = {
-    "type": "subFields",
+var container = {
         "css": {
-        "returnType": "",
+        "valueType": "",
         "attributeTag": "",
         "selectors": ["h2"]
     },
@@ -58,14 +58,14 @@ var subFields = {
 
 var applyDefaults = (type,data) =>{
  
-    if(type === "basic" || type === "multiple")
+    if(type === "basic" || type === "array")
         return _.extend({},basic,data);
-    else if (type === "multipleByTag")
-        return _.extend({},multipleByTag,data);
-    else if (type === "multipleKeyVal")
-        return _.extend({},multipleKeyVal,data);     
-    else if (type === "subFields")
-        return _.extend({},subFields,data);      
+    else if (type === "attrFilter")
+        return _.extend({},attrFilter,data);
+    else if (type === "keyVal")
+        return _.extend({},keyVal,data);     
+    else if (type === "container")
+        return _.extend({},container,data);      
     else return data;
 };
 

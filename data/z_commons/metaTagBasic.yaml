@@ -1,10 +1,10 @@
 ---
 data:
 - name: meta
-  type: multipleByTag
+  type: attrFilter
   selectors:
     - meta
-  returnType: attribute
+  valueType: attribute
   attributeTag: content
   attributeTagKeys:
     - name

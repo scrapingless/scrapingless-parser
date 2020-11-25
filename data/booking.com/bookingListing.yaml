@@ -3,15 +3,15 @@ data:
 
 
 
-- type: subFields
+- type: container
   name: offers
-  returnType: text
+  valueType: text
   selectors:
     - .hotellist > div > div
   fields:
 
 
-  - returnType: text
+  - valueType: text
     name: hotel
     selectors:
         - a.js-sr-hotel-link    
@@ -20,7 +20,7 @@ data:
       
 
   - name: hotel-link
-    returnType: attribute
+    valueType: attribute
     attributeTag: href
     selectors:
       - a.js-sr-hotel-link
@@ -33,21 +33,21 @@ data:
 
 
 
-  - returnType: text
+  - valueType: text
     name: desc
     selectors:
         - div.hotel_desc
     transform:
       - $removeReturn
 
-  - returnType: text
+  - valueType: text
     name: lastBooking
     selectors:
         - div div.lastbooking
     transform:
       - $removeReturn
 
-  - returnType: text
+  - valueType: text
     name: lastBookingTimes
     selectors:
         - div div.lastbooking
@@ -62,7 +62,7 @@ data:
         replaceVal: ''
       - $trim
 
-  - returnType: text
+  - valueType: text
     name: lastBookingHours
     selectors:
         - div div.lastbooking
@@ -78,7 +78,7 @@ data:
       - $trim
 
 
-  - returnType: text
+  - valueType: text
     name: reviewScore
     selectors:
         - div.bui-review-score__title
@@ -86,7 +86,7 @@ data:
       - $removeReturn
       - $trim
 
-  - returnType: text
+  - valueType: text
     name: score
     selectors:
         - div.bui-review-score__badge
@@ -94,7 +94,7 @@ data:
       - $removeReturn
       - $trim
 
-  - returnType: text
+  - valueType: text
     name: hotelReviews
     selectors:
         - div.bui-review-score__text    
