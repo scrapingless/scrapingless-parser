@@ -1,6 +1,9 @@
 {
     "config" :{       
         "dataLoader" : "yamlLoader",
+        "offlineDownloader":{
+            "cacheUrlMinutes" : 1440
+        },
         "scraper": {
             "browser" : "puppeteer",
             "apiUrl": "",

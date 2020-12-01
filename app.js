@@ -5,6 +5,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var parseRouter = require('./routes/parser');
+var browserRouter = require('./routes/browser');
 var conf = require('./config.json');
 var bodyParser = require('body-parser');
 
@@ -27,8 +28,11 @@ app.use(bodyParser.text({ type: 'text/plain', limit : "25mb" }))
     }
   });*/
 
-//app.use(express.static(path.join(__dirname, 'public')));
+  
+app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static('public'));
 app.use('/', indexRouter);
 app.use('/', parseRouter);
+app.use('/', browserRouter);
 
 module.exports = app;
