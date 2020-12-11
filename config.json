@@ -15,7 +15,7 @@
             },
             "puppeteerLaunchConf": {
                 "headless": false,
-                "args": ["--disable-setuid-sandbox","--disable-extensions"],
+                "args": ["--disable-setuid-sandbox","--disable-extensions","--disable-web-security"],
                 "ignoreHTTPSErrors": true,
                 "defaultViewport": {
                     "width": 1024,

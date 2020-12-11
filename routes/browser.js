@@ -19,7 +19,7 @@ router.post('/offline', async function(req, res, next) {
          pipeConf = await pipe.getPipeConf(req.query.url,'direct',req.query.ruleName,req.query.version);
     else  pipeConf = await pipe.getPipeConf(req.query.url,'auto','','',);
 
-    res.send(await downloader.getPageCache(req.query.url,req.query.force,pipeConf));
+    res.send(await downloader.getPageCache(req.query.url,req.query.force,pipeConf,req.query.enableJs));
 });
 
 /** offline download */
